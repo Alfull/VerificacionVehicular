@@ -1,12 +1,14 @@
 var data = [
-	{title:'Requisitos verificación', hasChild:true, test:'info-verificacion.js'},
-	{title:'Tarifas', hasChild:true, test:'info-tarifas.js'},
-	{title:'Multas', hasChild:true, test:'info-multas.js'}
+	{title:'Requisitos verificación', hasChild:true, test:'info-verificacion.js',backgroundColor:'white'},
+	{title:'Tarifas', hasChild:true, test:'info-tarifas.js',backgroundColor:'white'},
+	{title:'Multas', hasChild:true, test:'info-multas.js',backgroundColor:'white'}
 
 ];
 
 var tableview = Titanium.UI.createTableView({
 	data:data,
+	backgroundColor:'black',
+	//backgroundImage:'../imgs/bg.png',
 	style:Titanium.UI.iPhone.TableViewStyle.GROUPED
 });
 
