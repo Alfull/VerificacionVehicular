@@ -14,6 +14,8 @@ function ReminderForm(){
 	var w = Titanium.UI.createWindow({
 		backgroundColor:'white',
 		opacity:0.92,
+		barColor:'black',
+		backgroundImage:'../imgs/bg.png',
 		title:'Ajuste de recordatorio'
 	});
 	var b = Titanium.UI.createButton({

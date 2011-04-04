@@ -78,13 +78,14 @@ var tab3 = Titanium.UI.createTab({
 
 var label3 = Titanium.UI.createLabel({
 	color:'#999',
-	text:'To Do',
+	text:'',
 	font:{fontSize:20,fontFamily:'Helvetica Neue'},
 	textAlign:'center',
 	width:'auto'
 });
 
 win3.add(label3);
+
 
 //
 //create controls tab and root window
@@ -102,7 +103,7 @@ window:win4
 
 var label4 = Titanium.UI.createLabel({
 	color:'#999',
-	text:'To Do',
+	text:' ',
 	font:{fontSize:20,fontFamily:'Helvetica Neue'},
 	textAlign:'center',
 	width:'auto'
@@ -126,13 +127,13 @@ window:win5
 
 var label5 = Titanium.UI.createLabel({
 	color:'#999',
-	text:'To Do',
+	text:'',
 	font:{fontSize:20,fontFamily:'Helvetica Neue'},
 	textAlign:'center',
 	width:'auto'
 });
 
-win5.add(label5);
+//win5.add(label5);
 //
 //  add tabs
 //
@@ -141,6 +142,18 @@ tabGroup.addTab(tab2);
 tabGroup.addTab(tab3);
 tabGroup.addTab(tab4);
 tabGroup.addTab(tab5);
+
+win1.backgroundColor = 'black';
+win2.backgroundColor = 'black';
+win3.backgroundColor = 'black';
+win4.backgroundColor = 'black';
+win5.backgroundColor = 'black';
+
+win1.barColor = 'black';
+win2.barColor = 'black';
+win3.barColor = 'black';
+win4.barColor = 'black';
+win5.barColor = 'black';
 
 
 // open tab group
@@ -161,8 +174,9 @@ tabGroup.open();
 var primera = Titanium.App.Properties.getString('virgen');
 if(primera == null)
 {
-	Titanium.UI.createAlertDialog({title:'Bienvenido', message:'Para comenzar a usar la aplicación debe dar de alta sus vehículos oprimiendo el simbolo +'}).show();
+	Titanium.UI.createAlertDialog({title:'Bienvenido', message:'Para comenzar a usar la aplicación debe dar de alta sus vehículos oprimiendo el simbolo "+" en la sección "Ajustes"'}).show();
 	Titanium.App.Properties.setString('virgen','NO');
+	tabGroup.setActiveTab(4); 
 }
 
 //Inicializamos la base de datos

@@ -7,9 +7,10 @@ function VehiculoForm(vehiculo){
 	
 
 	var titulo='Nuevo vehículo';
-	var win = Ti.UI.createWindow({title:titulo,backgroundColor:"white"});
+	var win = Ti.UI.createWindow({title:titulo,backgroundColor:"black",backgroundImage:'../imgs/bg.png'});
+	win.barColor = 'black';
 	var meses =[];
-	meses.push('Nunca');
+	//meses.push('Nunca');
 	meses.push('Enero');meses.push('Febrero');meses.push('Marzo');meses.push('Abril');meses.push('Mayo');
 	meses.push('Junio');meses.push('Julio');meses.push('Agosto');meses.push('Septiembre');meses.push('Octubre');
 	meses.push('Noviembre');meses.push('Diciembre');
@@ -23,7 +24,7 @@ function VehiculoForm(vehiculo){
 	var filtroAlias = function(e)
 	{
 		var val = e.source.value;
-		var maxlon = 20;
+		var maxlon = 12;
 		!!( /[^0-9a-zA-ZñÑ\s]/.test(val) ) ? e.source.value = val.replace(/[^0-9a-zA-ZñÑ\s]/gi,'') : false ;
 		e.source.value = e.source.value.slice(0,maxlon);
 		e.source.value = e.source.value.toUpperCase();
@@ -130,7 +131,7 @@ function VehiculoForm(vehiculo){
 				var nombreFoto = 'vehiculo_'+ts+'.jpg';
 				var f = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory,nombreFoto);
 				f.write(image);
-				vBFoto.image = f.nativePath;
+				//vBFoto.image = f.nativePath;
 				vehiculo.pathFoto = f.nativePath;
 				Ti.API.info("Path foto: "+f.nativePath);
 				
@@ -208,13 +209,15 @@ function VehiculoForm(vehiculo){
 	rAlias.myid = "alias";
 	var lAlias = Titanium.UI.createLabel({
 	    text:'Alias',
-	    height:'auto',
-	    width:'auto',
+	    height:anchoCol,
+	    width:140,
+	    //backgroundImage:'../imgs/bgcell.png',
 	    color:'#aaa',
-	    //backgroundColor:'#000000',
-	    left:5,
+	    //borderColor:'black',
+	    //borderWidth:1,
+	    left:0,
 	    font:{fontSize: fsize},
-	    textAlign:'left'
+	    textAlign:'right'
 	});
 	var fAlias = Ti.UI.createTextField({
 		hintText:'',
@@ -225,7 +228,7 @@ function VehiculoForm(vehiculo){
 		returnKeyType:Titanium.UI.RETURNKEY_DONE,
 		top:0,
 		left:lAlias.width+10,
-		width:200
+		width:150
 	});
 	rAlias.add(lAlias);
 	rAlias.add(fAlias);
@@ -235,13 +238,14 @@ function VehiculoForm(vehiculo){
 	rPlaca.myid = "placa";
 	var lPlaca = Titanium.UI.createLabel({
 	    text:'Placa',
-	    height:'auto',
-	    width:'auto',
+	    height:anchoCol,
+	    width:140,
 	    color:'#aaa',
+	    //backgroundImage:'../imgs/bgcell.png',
 	    //backgroundColor:'#000000',
-	    left:5,
+	    left:0,
 	    font:{fontSize: fsize},
-	    textAlign:'left'
+	    textAlign:'right'
 	});
 
 	var fPlaca = Ti.UI.createTextField({
@@ -254,7 +258,7 @@ function VehiculoForm(vehiculo){
 		top:0,
 		left:lPlaca.width+10,
 		
-		width:200
+		width:150
 	});
 	rPlaca.add(lPlaca);
 	rPlaca.add(fPlaca);
@@ -337,12 +341,14 @@ function VehiculoForm(vehiculo){
 	rModelo.myid = "modelo";
 	var lModelo = Titanium.UI.createLabel({
 	    text:'Modelo',
-	    height:'auto',
-	    width:'auto',
+	    height:anchoCol,
+	    width:140,
 	    color:'#aaa',
 	    font:{fontSize: fsize},
-	    left:5,
-	    textAlign:'left'
+	    //backgroundImage:'../imgs/bgcell.png',
+	    //right:10,
+	    left:0,
+	    textAlign:'right'
 	});
 	var lModeloSel = Titanium.UI.createLabel({
 	    text:'',
@@ -362,12 +368,15 @@ function VehiculoForm(vehiculo){
 	rUltima.myid = "ultima";
 	var lUltima = Titanium.UI.createLabel({
 	    text:'Última verificación',
-	    height:'auto',
-	    width:'auto',
+	    height:anchoCol,
+	    width:140,
+	    //backgroundImage:'../imgs/bgcell.png',
+	    //borderColor:'black',
+	    //borderWidth:1,
 	    color:'#aaa',
-	    left:5,
+	    left:0,
 	    font:{fontSize: fsize},
-	    textAlign:'left'
+	    textAlign:'right'
 	});
 	
 	var lUltimaSel = Titanium.UI.createLabel({
@@ -375,6 +384,7 @@ function VehiculoForm(vehiculo){
 	    height:100,
 	    width:200,
 	    color:'#000000',
+	    minimumFontSize:10,
 	    left:lUltima.width+10,
 	    textAlign:'left'
 	});	
@@ -397,36 +407,37 @@ function VehiculoForm(vehiculo){
 	tableForm.addEventListener('click', function(){});
 	
 	//Foto y ToDo list view
-	var vFotoTodoList = Ti.UI.createView({width:'300',height:'auto',bottom:20});
+	var vFotoTodoList = Ti.UI.createView({width:'300',height:'auto',bottom:40});
 	
 	//var rFoto = Ti.UI.createTableViewRow({backgroundColor:'transparent',borderWidth:0,height:150,width:'auto',selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,header:" "});
 	//rFoto.myid = "foto";
 	
-	var vBFoto = Titanium.UI.createImageView({
-		image:'../imgs/boton-cam.png',
-		
-		//top:0,
-		left:30,
-		//bottom:4,
-		height:80,
-		width:80
+	var botonFoto = Titanium.UI.createButton({
+		width:120,
+		color:'black',
+		title:'Tomar Foto',
+		height:40,
+		top:20,
+		left:10
 	});
-	vBFoto.addEventListener('click', tomaFoto);
+	
+	botonFoto.addEventListener('click', tomaFoto);
 	//rFoto.add(vBFoto);
 
-	var vReminder = Titanium.UI.createImageView({
-		image:(vehiculo.path_foto == null)?'../imgs/boton-reminder.png':vehiculo.path_foto,
-		top:0,
-		right:30,
-		//bottom:4,
-		height:80,
-		width:80
+	var botonReminder = Titanium.UI.createButton({
+		width:120,
+		color:'black',
+		title:'Recordatorios',
+		top:20,
+		height:40,
+		right:10
 	});
+
 	
-	vFotoTodoList.add(vBFoto);
-	vFotoTodoList.add(vReminder);	
+	vFotoTodoList.add(botonFoto);
+	vFotoTodoList.add(botonReminder);	
 	
-	vReminder.addEventListener('click',function(){
+	botonReminder.addEventListener('click',function(){
 		//Modal para recordatorios
 		ReminderForm();
 	});	
@@ -444,6 +455,7 @@ function VehiculoForm(vehiculo){
 		var w = Titanium.UI.createWindow({
 			backgroundColor:'black',
 			opacity:0.92,
+			barColor:'black',
 			title:'Seleccione Modelo'
 		});
 		var b = Titanium.UI.createButton({
@@ -507,6 +519,7 @@ function VehiculoForm(vehiculo){
 		var w = Titanium.UI.createWindow({
 			backgroundColor:'black',
 			opacity:0.92,
+			barColor:'black',
 			title:'Última Verificación'
 		});
 		var b = Titanium.UI.createButton({
@@ -525,13 +538,13 @@ function VehiculoForm(vehiculo){
 		var hasta = new Date().getFullYear();
 		//var hasta = 2011;
 		var anio = hasta-3;
-		colAnio.addRow(Ti.UI.createPickerRow({title:"Nunca",custom_item:"--"}));
+		//colAnio.addRow(Ti.UI.createPickerRow({title:"Nunca",custom_item:"--"}));
 		for(anio; anio< hasta; anio++){
 			colAnio.addRow(Ti.UI.createPickerRow({title:anio+"",custom_item:anio+""}));
 		}
 		var i;
-		colMes.addRow(Ti.UI.createPickerRow({title:"Nunca",custom_item:"--"}));
-		for(i=1; i<= 12; i++){
+		//colMes.addRow(Ti.UI.createPickerRow({title:"Nunca",custom_item:"--"}));
+		for(i=0; i<= 11; i++){
 			colMes.addRow(Ti.UI.createPickerRow({title:meses[i],custom_item:i+""}));
 		}
 
@@ -594,7 +607,7 @@ function VehiculoForm(vehiculo){
 		if(vehiculo.engomado==3) vColorVer.image='../imgs/icono3.png';
 		if(vehiculo.engomado==4) vColorAz.image='../imgs/icono4.png';
 		if(vehiculo.engomado==5) vColorRoj.image='../imgs/icono5.png';
-		vBFoto.image = (vehiculo.path_foto)?vehiculo.pathFoto:'../imgs/boton-cam.png';
+		//vBFoto.image = (vehiculo.path_foto)?vehiculo.pathFoto:'../imgs/boton-cam.png';
 		
 		
 		

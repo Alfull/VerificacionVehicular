@@ -8,7 +8,7 @@ var win = Titanium.UI.currentWindow;
 Ti.include("../verificentros.js");
 
 var search = Titanium.UI.createSearchBar({
-	barColor:'#385292',
+	barColor:'black',
 	hintText:'Colonia, delegación o municipio',
 	showCancel:true
 });
@@ -34,17 +34,29 @@ var currentRowIndex = null;
 var fontSize = 12;
 var alLeft = 14;
 
+var actInd = Titanium.UI.createActivityIndicator({
+	style:Titanium.UI.iPhone.ActivityIndicatorStyle.PLAIN
+});
+win.toolbarColor='black';
+win.backgroundImage='../imgs/bg2.png',
+
+actInd.color = 'white';
+actInd.message = 'Cargando...';
+
+win.setToolbar([actInd],{animated:true});
+actInd.show();
+
 //create the rest of the rows
 for(var dat in datos)
 {
-	var row = Ti.UI.createTableViewRow();
+	var row = Ti.UI.createTableViewRow({backgroundColor:'white'});
 	row.selectedBackgroundColor = '#fff';
 	row.height = 90;
 	row.className = 'datarow';
 	row.clickName = 'row';
 
 	var labCol = Ti.UI.createLabel({
-		color:'#576996',
+		color:'black',
 		font:{fontSize:fontSize+2,fontWeight:'bold', fontFamily:'Arial'},
 		width:"auto",
 		clickName:'user',
@@ -106,18 +118,20 @@ for(var dat in datos)
 	
 	//Fila de boton
 	var button = Ti.UI.createView({
-		backgroundImage:'../imgs/map-marker.png',
+		backgroundImage:'../imgs/pin.png',
 		top:'auto',
 		right:10,
-		width:16,
+		width:9,
 		clickName:'button',
-		height:32
+		height:20
 	});
 	row.add(button);
 
 	data.push(row);
 }
 
+actInd.hide();
+win.setToolbar(null,{animated:true});
 
 //
 //create table view (
@@ -126,6 +140,9 @@ tableView = Titanium.UI.createTableView({
 	data:data,
 	search:search,
 	filterAttribute:'filter',
+	//borderRadius:10,
+	//borderColor:'#aaa',
+	//width:300,
 	style:Titanium.UI.iPhone.TableViewStyle.GROUPED
 });
 

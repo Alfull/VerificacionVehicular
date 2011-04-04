@@ -1,4 +1,4 @@
-#Tue Mar 29 23:05:27 CST 2011
+#Sun Apr 03 22:09:44 CDT 2011
 eclipse.preferences.version=1
 encoding//Resources/app.js=UTF-8
 encoding//Resources/main_windows/ReminderForm.js=UTF-8
@@ -9,3 +9,6 @@ encoding//Resources/main_windows/lista_inicio.js=UTF-8
 encoding//Resources/main_windows/lista_vehiculos.js=UTF-8
 encoding//Resources/main_windows/lista_verificentros.js=UTF-8
 encoding//Resources/main_windows/quejas.js=UTF-8
+encoding//Resources/main_windows/requisitos.html=UTF-8
+encoding//Resources/main_windows/tarifas.html=UTF-8
+encoding//Resources/modelo/vehiculo.js=UTF-8

@@ -1,6 +1,6 @@
 var win = Titanium.UI.currentWindow;
 var tabGroup = win.tabGroup;
-
+win.barColor = 'black';
 //Incluimos el modelo
 Ti.include("../modelo/vehiculo.js");
 Ti.include("RowsVehiculo.js");
