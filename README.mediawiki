@@ -1,7 +1,7 @@
-=Recordatorios para verificaci梟 vehicular=
+=Recordatorios para verificaci贸n vehicular=
 
-App M梫il para iphone que emite recordatorios de verificaci梟 para m渓tiples veh抍ulos dentro del programa de verificaci梟 vehicular antocontaminante mexicano
+App M贸vil para iphone basada en Titanium Appcelerator, que emite recordatorios de verificaci贸n para m煤ltiples veh铆culos dentro del programa de verificaci贸n vehicular anticontaminante mexicano.
 
 =Sobre Titanium=
 
-Se ha realizado esta app, como ejercicio utilizando el framework proporcionado por Appcelerator.
+Se ha realizado esta app, como ejercicio utilizando el framework proporcionado por [[http://http://www.appcelerator.com/ | Appcelerator]].
