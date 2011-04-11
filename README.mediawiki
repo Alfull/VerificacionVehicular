@@ -4,4 +4,4 @@ App Móvil para iphone basada en Titanium Appcelerator, que emite recordatorios 
 
 =Sobre Titanium=
 
-Se ha realizado esta app, como ejercicio utilizando el framework proporcionado por [[http://http://www.appcelerator.com/ | Appcelerator]].
+Se ha realizado esta app, como ejercicio utilizando el framework proporcionado por [[http://www.appcelerator.com/ | Appcelerator]].
