@@ -1,7 +1,7 @@
 /**
  * Forma que configura los recordatorios para cada vehiculo
  */
-function ReminderForm(){
+function ReminderForm(vehiculo){
 
 	//Ancho de filas
 	var anchoFil = 50;
@@ -236,21 +236,41 @@ function ReminderForm(){
 	swRem1.addEventListener('change',function(e)
 	{
 		Ti.API.info('Basic Switch value = ' + e.value + ' act val ' + swRem1.value);
+		vehiculo.swn1 = (swRem1.value)? 1 : 0;
+
 	});
 	
+	swRem2.addEventListener('change',function(e)
+	{
+		Ti.API.info('Basic Switch value = ' + e.value + ' act val ' + swRem2.value);
+		vehiculo.swn2 = (swRem2.value)? 1 : 0;		
+	});
+	swRem3.addEventListener('change',function(e)
+	{
+		Ti.API.info('Basic Switch value = ' + e.value + ' act val ' + swRem3.value);
+		vehiculo.swn3 = (swRem3.value)? 1 : 0;
+	});
+	swRem4.addEventListener('change',function(e)
+	{
+		Ti.API.info('Basic Switch value = ' + e.value + ' act val ' + swRem4.value);
+		vehiculo.swn4 = (swRem4.value)? 1 : 0;
+	});
 	
+	(vehiculo.swn1)? swRem1.value = true:swRem1.value=false;
+	(vehiculo.swn2)? swRem2.value = true:swRem2.value=false;
+	(vehiculo.swn3)? swRem3.value = true:swRem3.value=false;
+	(vehiculo.swn4)? swRem4.value = true:swRem4.value=false;
 	
 	w.add(tableForm);
 	w.open({modal:true});
 
 	tableForm.addEventListener('click', function(e)
 	{
-		// event data
-		//if(e.section.rowCount < 3){
+	
 		
 		var section = e.section;
 		Ti.API.info('Rows en seccion: '+section.rowCount+' index: '+e.index);
-		if(section.rowCount < 3){// reset checks
+		if(section.rowCount < 3){// resetear checks
 		
 			setTimeout(function()
 			{
@@ -259,8 +279,7 @@ function ReminderForm(){
 					section.rows[i].hasCheck = false;
 					section.rows[i].children[0].color = '#000';
 				}
-				// set current check
-				//var row = tableForm.selectRow(e.index);
+
 				e.row.hasCheck = true;
 				e.row.children[0].color = '#336699';
 						

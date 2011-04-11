@@ -23,11 +23,6 @@ tabGroup.addEventListener('focus',function(e){
 
 
 
-
-//Para cada dato se crean vistas dentro del scroll
-//function RowsVehiculo()
-//{
-
 	//Se crea vista base:
 	var cover = Titanium.UI.createView({
 		backgroundImage:'../imgs/bg2.png',
@@ -61,7 +56,7 @@ tabGroup.addEventListener('focus',function(e){
 			    width:315,
 			    height:360
 			});
-			
+			view.vehiculoId = vehiculo.id;
 			//Creamos los labels para cada vehiculo
 			var lAlias = Ti.UI.createLabel({
 				color:fcolor,
@@ -170,7 +165,7 @@ tabGroup.addEventListener('focus',function(e){
 			
 			var vUltimaVer = Ti.UI.createLabel({
 				color:fcolor,
-				font:{fontSize:14,fontWeight:'bold', fontFamily:ff},
+				font:{fontSize:14,fontWeight:'normal', fontFamily:ff},
 				//shadowColor: 'white',
 				//shadowOffset: {x:1,y:1},				
 				top:14,
@@ -231,12 +226,12 @@ tabGroup.addEventListener('focus',function(e){
 			
 			var vFaltan = Ti.UI.createLabel({
 				color:fcolor,
-				font:{fontSize:14,fontWeight:'normal', fontFamily:ff},
-				minimumFontSize:10,
+				font:{fontSize:14,fontWeight:'bold', fontFamily:ff},
+				minimumFontSize:9,
 				//shadowColor: 'white',
 				//shadowOffset: {x:1,y:1},				
 				top:vProxVer.top + vProxVer.height + 2,
-				width:'240',
+				width:'230',
 				height:16,
 				//borderWidth: 1,
 				//borderColor: 'black',
@@ -248,12 +243,68 @@ tabGroup.addEventListener('focus',function(e){
 			grupo3.add(lProxVer);
 			grupo3.add(vProxVer);
 			grupo3.add(vFaltan);
+			
 			//**************************** FIN GRUPO 3
+
+			
+			var botonOK = Titanium.UI.createImageView({
+				width:18,
+				image:'../imgs/todo.png',
+				height:19,
+				bottom:0,
+				right:0
+			});
+			botonOK.vehiculoId = vehiculo.id;
+			botonOK.vehiculo = vehiculo;
+			botonOK.addEventListener('click', function(e){
+				var w = Ti.UI.createWindow({
+					backgroundColor:'white'
+				});
+				var b = Ti.UI.createButton({
+					title:'Ya he verificado este vehículo',
+					bottom:120,
+					width:290,
+					height:30
+				});
+				b.vehiculo = e.source.vehiculo;
+				var c = Ti.UI.createButton({
+					title:'Cancelar',
+					bottom:40,
+					width:290,
+					height:30
+				});
+				b.addEventListener('click',function(e)
+				{
+					var cvehiculo = e.source.vehiculo;
+					cvehiculo.anioUltimaVerificacion = new Date().getFullYear();
+					cvehiculo.mesUltimaVerificacion = new Date().getMonth();
+					cvehiculo.calculaRecordatorios();
+					cvehiculo.guardar();
+					var svcp = scrollView.currentPage;
+					scrollView.views=[];
+					scrollView.views = creaRows();
+					scrollView.scrollToView(svcp);
+					//Se emite trigger de vehiculo guardado
+					Ti.App.fireEvent('vehiculo.guardado');
+					w.close();
+				});
+
+				c.addEventListener('click',function()
+				{
+					w.close();
+				});
+				w.add(c);
+				w.add(b);
+				w.open({modal:true,modalTransitionStyle:Ti.UI.iPhone.MODAL_TRANSITION_STYLE_PARTIAL_CURL,navBarHidden:true});
+
+			});
+			
 			
 			view.add(lAlias);
 			view.add(grupo1);
 			view.add(grupo2);
 			view.add(grupo3);
+			view.add(botonOK);
 			//view.add(vProxVer);
 			//view.add(vFaltan);
 			

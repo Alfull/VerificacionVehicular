@@ -4,9 +4,10 @@
 
 var AMARILLO = 'imgs/icono1.png';
 var ROSA = 'imgs/icono2.png';
-var VERDE = 'imgs/icono3.png';
-var AZUL = 'imgs/icono4.png';
-var ROJO = 'imgs/icono5.png';
+var ROJO = 'imgs/icono3.png';
+var VERDE = 'imgs/icono4.png';
+var AZUL = 'imgs/icono5.png';
+
 
 var mesv =[];
 mesv[0]=[];mesv[1]=[];mesv[2]=[];mesv[3]=[];mesv[4]=[];mesv[5]=[];mesv[6]=[];mesv[7]=[];mesv[8]=[];mesv[9]=[];
@@ -38,7 +39,7 @@ mesv[9][1]="Noviembre - Diciembre";
 
 function RowsVehiculo()
 {
-	// create table view data object
+
 	var db = Titanium.Database.open('BDVerificacionVehicular');
 	var rows = db.execute('SELECT * FROM vehiculo');
 	var c = 0;
@@ -169,14 +170,14 @@ function RowsVehiculo()
 		//Cuarto renglon
 		var vProxVer = Ti.UI.createLabel({
 			color:'black',
-			font:{fontSize:16,fontWeight:'bold', fontFamily:'Arial'},
+			font:{fontSize:13,fontWeight:'bold', fontFamily:'Arial'},
 			left: vFoto.left + vFoto.width + 10,
 			top:lProxVer.height + lProxVer.top +1,
 			width:200,
 			height:16,
 			
 			textAlign: txAl,
-			text:mesesVerifica(vehiculo.terminacion, vehiculo.mesUltimaVerificacion, vehiculo.anioUltimaVerificacion)
+			text:vehiculo.proximaVerificacion()
 			
 		});
 		vProxVer.rowNum = c;
@@ -192,7 +193,7 @@ function RowsVehiculo()
 			height:14,
 			
 			textAlign: txAl,
-			text: "Faltan "+ faltanDias(vehiculo.terminacion, vehiculo.mesUltimaVerificacion, vehiculo.anioUltimaVerificacion)+ " días"
+			text: vehiculo.diasFaltantes()
 			
 		});
 		lFaltan.rowNum = c;
@@ -202,7 +203,7 @@ function RowsVehiculo()
 		row.className='vehiculo_row';
 		
 		row.vehiculo = vehiculo;
-		row.addEventListener('click',mostrarVehiculo);
+		//row.addEventListener('click',mostrarVehiculo);
 		
 		data.push(row);
 		rows.next();
@@ -269,33 +270,4 @@ function imagenEngomado(engomado){
 	return '../imgs/icono'+engomado+'.png';
 }
 
-/**
- * Funcion que determina los meses en que se debe verificar
- * @param terminacion
- * @param muv
- * @param auv
- * @returns string
- */
-function mesesVerifica(terminacion,muv,auv){
-	//TODO: Que se debe hacer cuando nunca se ha verificado?
-	var bimestre = (muv < 7)? 0:1;
-	Ti.API.info('Terminacion: '+terminacion);
-	//TODO: se debe determinar el año en que se va a verificar.
-	
-	return mesv[terminacion][bimestre] + ' de '+auv;
-	
-}
 
-function faltanDias(terminacion,muv,auv){
-	//TODO: hacer función que determina el tiempo restante.
-	return 234;
-}
-
-/**
- * Ejecuta la vista para mostrar los detalles del vehiculo
- * @param e
- */
-function mostrarVehiculo(e){
-	//var vehiculo = e.row.vehiculo;
-	//Ti.API.info('Se quieren ver los detalles de: '+vehiculo);
-}

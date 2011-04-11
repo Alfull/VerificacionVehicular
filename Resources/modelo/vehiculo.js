@@ -1,5 +1,6 @@
 /**
- * Clase Vehiculo
+ * Clase Vehiculo.
+ * Se encarga de los atributos del vehiculo asi como implementar operaciones de calculo de tiempo restante y recordatorios.
  */
 
 function Vehiculo(rows){
@@ -35,6 +36,37 @@ function Vehiculo(rows){
 	mesv[9][0]="Mayo - Junio";
 	mesv[9][1]="Noviembre - Diciembre";
 	
+	var meso =[];
+	meso[0]=[];meso[1]=[];meso[2]=[];meso[3]=[];meso[4]=[];meso[5]=[];meso[6]=[];meso[7]=[];meso[8]=[];meso[9]=[];
+	meso[0][0]={ini:5,fin:6};
+	meso[0][1]={ini:11,fin:12};
+
+	meso[1][0]={ini:4,fin:5};
+	meso[1][1]={ini:10,fin:11};
+	meso[2][0]={ini:4,fin:5};
+	meso[2][1]={ini:10,fin:11};
+
+	meso[3][0]={ini:3,fin:4};
+	meso[3][1]={ini:9,fin:10};
+	meso[4][0]={ini:3,fin:4};
+	meso[4][1]={ini:9,fin:10};
+
+	meso[5][0]={ini:1,fin:2};
+	meso[5][1]={ini:7,fin:8};
+	meso[6][0]={ini:3,fin:4};
+	meso[6][1]={ini:9,fin:10};
+
+	meso[7][0]={ini:2,fin:3};
+	meso[7][1]={ini:8,fin:9};
+	meso[8][0]={ini:2,fin:3};
+	meso[8][1]={ini:8,fin:9};
+
+	meso[9][0]={ini:5,fin:6};
+	meso[9][1]={ini:11,fin:12};
+
+	var mesUVAux=null;
+	var anioUVAux = null;
+	
 	//Variables publicas
 	this.id=0;
 	this.alias='';
@@ -49,6 +81,10 @@ function Vehiculo(rows){
 	this.n2=null;
 	this.n3=null;
 	this.n4=null;
+	this.swn1 = 1;
+	this.swn2 = 1;
+	this.swn3 = 1;
+	this.swn4 = 1;
 	this.semestre=0;
 	
 	if(rows != null){
@@ -65,11 +101,19 @@ function Vehiculo(rows){
 		this.n2 = rows.fieldByName('n2');
 		this.n3 = rows.fieldByName('n3');
 		this.n4 = rows.fieldByName('n4');
+		
+		this.swn1 = rows.fieldByName('swn1');
+		this.swn2 = rows.fieldByName('swn2');
+		this.swn3 = rows.fieldByName('swn3');
+		this.swn4 = rows.fieldByName('swn4');
+
 		this.semestre = rows.fieldByName('semestre');
 	}
 		
 		
-	//Metodo para resetar
+	/**
+	 * Metodo para resetar
+	 */
 	this.reset = function(){
 		this.id=0;
 		this.alias='';
@@ -84,29 +128,40 @@ function Vehiculo(rows){
 		this.n2=null;
 		this.n3=null;
 		this.n4=null;
+		this.swn1=1;
+		this.swn2=1;
+		this.swn3=1;
+		this.swn4=1;
+
 		this.semestre=0;
 	};
 	
-	//Metodo toString para debuguear
+	/**
+	 * Metodo toString para debuguear
+	 */
 	this.toString = function(){
 		var str = 'Alias:'+this.alias+' Placa:'+this.placa+' Mod:'+this.modelo+' term:'+this.terminacion+' goma:'+
 		this.engomado+' AuV:'+this.anioUltimaVerificacion+' MuV:'+this.mesUltimaVerificacion +
-		+' path_foto: '+this.pathFoto+
-		' N1:'+this.n1+ ' N2:'+this.n2+ ' N3:'+this.n3+ ' N4:'+this.n4+ ' Semestre:'+this.semestre; 
+		' path_foto: '+this.pathFoto+
+		' N1:'+this.n1+ ' N2:'+this.n2+ ' N3:'+this.n3+ ' N4:'+this.n4+
+		' SWN1:'+this.swn1+ ' SWN2:'+this.swn2+ ' SWN3:'+this.swn3+ ' SWN4:'+this.swn4+ ' Semestre:'+this.semestre; 
 		
 		return str;
 	};
-	//Metodo para guardar los vehiculos en la bd
+	
+	/**
+	 * Metodo para guardar los vehiculos en la bd
+	 */
 	this.guardar = function(){
 		var db = Titanium.Database.open('BDVerificacionVehicular');
 		//Si es nuevo insertamos
 		if(this.id==0){
 			this.id = new Date().getTime();
-			var sql = 'INSERT INTO vehiculo (id, alias, placa, modelo, auv, muv, engomado, terminacion, path_foto, n1, n2, n3, n4, semestre ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+			var sql = 'INSERT INTO vehiculo (id, alias, placa, modelo, auv, muv, engomado, terminacion, path_foto, n1, n2, n3, n4, swn1, swn2, swn3, swn4, semestre ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 			db.execute(sql, 
 					this.id, this.alias, this.placa, this.modelo, this.anioUltimaVerificacion, this.mesUltimaVerificacion, 
 					this.engomado, this.terminacion, this.pathFoto,
-					this.n1, this.n2, this.n3, this.n4, this.semestre
+					this.n1, this.n2, this.n3, this.n4, this.swn1, this.swn2, this.swn3, this.swn4, this.semestre
 					);
 			Ti.API.info("Guardando: "+this.toString());
 			Ti.API.info("IdEnBase: "+db.lastInsertRowId);
@@ -116,11 +171,11 @@ function Vehiculo(rows){
 		}
 		else
 		{
-			var sql = 'UPDATE vehiculo SET alias = ?, placa = ?, modelo = ?, auv=?, muv=?, engomado=?, terminacion=?, path_foto=?, n1=?, n2=?, n3=?, n4=?, semestre=? WHERE id = ?';
+			var sql = 'UPDATE vehiculo SET alias = ?, placa = ?, modelo = ?, auv=?, muv=?, engomado=?, terminacion=?, path_foto=?, n1=?, n2=?, n3=?, n4=?, swn1=?, swn2=?, swn3=?, swn4=?, semestre=? WHERE id = ?';
 			db.execute(sql, 
 					this.alias, this.placa, this.modelo, this.anioUltimaVerificacion, this.mesUltimaVerificacion, 
 					this.engomado, this.terminacion, this.pathFoto, 
-					this.n1,this.n2,this.n3,this.n4,this.semestre,
+					this.n1,this.n2,this.n3,this.n4,this.swn1,this.swn2,this.swn3,this.swn4,this.semestre,
 					this.id);
 			var res = db.rowsAffected;
 			db.close();
@@ -131,7 +186,9 @@ function Vehiculo(rows){
 		
 	};
 	
-	//Funcion para borrar vehiculos
+	/**
+	 * Funcion para borrar vehiculos
+	 */
 	this.borrar = function(id){
 		var db = Titanium.Database.open('BDVerificacionVehicular');
 		var sql = 'DELETE FROM vehiculo WHERE id = ?';
@@ -142,8 +199,10 @@ function Vehiculo(rows){
 		return res;
 	};
 	
-	//Valida que los datos requeridos para guardar esten completos y sean coherentes
-	//TODO: validar que sean coherentes.
+	
+	/**
+	 * Valida que los datos requeridos para guardar esten completos y sean coherentes
+	 */
 	this.validar = function(){
 		
 		if(this.alias == null || this.alias == '')
@@ -168,6 +227,9 @@ function Vehiculo(rows){
 		}
 	};
 	
+	/**
+	 * Valida el numero de placa
+	 */
 	this.validaPlaca = function(placa){
 		var val = placa;
 		if(val == null || val == '') return false;
@@ -184,48 +246,238 @@ function Vehiculo(rows){
 			return false;
 	};
 	
-	this.calculaRecordatorios = function(rn1, rn2, rn3, rn4){
+	/**
+	 * Genera los recordatorios para cada configuracion seteada.
+	 */
+	this.calculaRecordatorios = function(){
 		
-		//Primero vemos cuando le toca verificar. Mediante modelo, mes y año de ultima verificacion
+		var pv = this.calculaProximaVerificacion();
 		
-		//Casos: modelo año actual, modelo año posterior y modelo anterior al año, le toca verificar hasta dentro de 4 periodos.
+		var anioProxVer = pv.anio;
+		var mesIni = pv.periodo.ini;
+		var mesFin = pv.periodo.fin;
+		
+		//vemos si se requiere la primera notificacion
+		if(this.swn1){
+			var notification = Ti.App.iOS.scheduleLocalNotification({
+				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin],
+				alertAction:"OK",
+				sound:"pop.caf",
+				date:new Date(new Date(anioProxVer,mesIni-1,1).getTime() + 32400000) //
+				//date:new Date(new Date().getTime()+300000)
+			});
+			this.n1 = anioProxVer+'-'+mesIni+'-'+'01';
+		}
+		else{
+			this.n1 = null;
+		}
+		//vemos si se requiere la segunda notificacion
+		if(this.swn2){
+			var notification = Ti.App.iOS.scheduleLocalNotification({
+				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'. Le queda solamente un mes para verificar.',
+				alertAction:"OK",
+				sound:"pop.caf",
+				date:new Date(new Date(anioProxVer,mesFin-1,1).getTime() + 32400000)
+				//date:new Date(new Date().getTime()+600000)
+			});
+			this.n2 = anioProxVer+'-'+mesFin+'-'+'01';
+		}
+		else{
+			this.n2 = null;
+		}
+		//vemos si se requiere la tercer notificacion
+		if(this.swn3){
+			var notification = Ti.App.iOS.scheduleLocalNotification({
+				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'. Le queda menos de dos semanas para verificar.',
+				alertAction:"OK",
+				sound:"pop.caf",
+				//date:new Date(new Date().getTime() + 900000)//
+				date:new Date(new Date(anioProxVer,mesFin-1,15).getTime() + 32400000)
+			});
+			this.n3 = anioProxVer+'-'+mesFin+'-'+'15';
+		}
+		else{
+			this.n3 = null;
+		}
+		
+		//vemos si se requiere la cuarta notificacion
+		if(this.swn4){
+			var notification = Ti.App.iOS.scheduleLocalNotification({
+				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'. Le queda menos de una semana para verificar.',
+				alertAction:"OK",
+				sound:"pop.caf",
+				date:new Date(new Date(anioProxVer,mesFin-1,23).getTime() + 32400000)
+				//date:new Date(new Date().getTime()+120000)
+			});
+			this.n4 = anioProxVer+'-'+mesFin+'-'+'23';
+		}
+		else{
+			this.n4 = null;
+		}		
+		
+	};
+	
+	/**
+	 * Despliega el label de ultima verificacion
+	 */
+	this.ultimaVerificacion = function(){
+		Ti.API.info('MesID:'+this.mesUltimaVerificacion);
+		var muv = ((this.mesUltimaVerificacion -1) >= 0)? this.mesUltimaVerificacion : 0;
+		return meses[muv].toUpperCase() + ' '+this.anioUltimaVerificacion;
+	};
+	
+	/**
+	 * Despliega label de proxima verificacion
+	 */
+	this.proximaVerificacion = function(){
+		
+		var pv = this.calculaProximaVerificacion();
+		
+		var anioProxVer = pv.anio;
+		var periodoProxVer = meses[pv.periodo.ini -1] + ' - '+meses[pv.periodo.fin -1];
+		
+		return periodoProxVer + ' de '+anioProxVer;
+	};
+	
+	/**
+	 * Calcula los dias faltantes para que termine el prox periodo de verificacion
+	 */
+	this.diasFaltantes = function(){
+		
+		var pv = this.calculaProximaVerificacion();
+		
+		var hoy = new Date();
+		var fin = new Date(pv.anio,pv.periodo.fin,0);
+		var inicio = new Date(pv.anio,pv.periodo.ini-1,1);
+		
+		Ti.API.info('Fin:'+fin);
+		
+		var _sec = 1000;
+		var _min = _sec * 60;
+		var _hr = _min * 60;
+		var _dia = _hr * 24;
+		
+	    var now = new Date();
+	    var diff = fin - hoy;
+	    var diasfin = Math.floor(diff / _dia);		
+
+	    var difi = inicio - hoy;
+	    var diasini = Math.floor(difi / _dia);		
+	    
+	    Ti.API.info('Faltan:'+diasini);
+	    Ti.API.info('Quedan:'+diasfin);
+	    
+	    var res;
+	    //Todavia falta para que verifique.
+	    if(diasini > 0){
+	    	
+	    	res = 'Faltan '+diasini+' días';
+	    }
+	    //Esta dentro del periodo
+	    else if(diasini < 0 && diasfin > 0){
+	    	
+	    	res = 'Restan '+diasfin+' días para verificar';
+	    }
+	    //Ya se paso de su verificación
+	    else if(diasfin < 0){
+	    	
+	    	'Finalizó período hace '+Math.abs(diasfin)+' días';
+	    }
+	    
+		return res;
+	};
+	
+	/**
+	 * Regresa un objeto con el periodo de la proxima verificacion
+	 */
+	this.calculaProximaVerificacion = function(){
+		
+		var bimestre, anioProxVerificacion; 
+		if(mesUVAux != null) 
+		{
+			bimestre = (mesUVAux < 5)? 0:1;
+		}
+		else
+		{
+			bimestre = (this.mesUltimaVerificacion < 5)? 0:1;
+		}
+		
+		if(anioUVAux){
+			
+			anioProxVerificacion = anioUVAux;
+		}
+		else {
+			
+			anioProxVerificacion = Number(this.anioUltimaVerificacion);	
+		}
+			
+		
+		var periodoProxVer = {};
 		var anioActual = new Date().getFullYear();
+		Ti.API.info('Terminacion: '+this.terminacion);
+		
+		
 		if(this.modelo == anioActual || this.modelo == anioActual +1 || this.modelo == anioActual -1){
 			
 			//Aplica para modelos nuevos verificación hasta por 3 periodos mas.
-			Ti.API.info("Es auto nuevo, verifica hasta dentro de 3 periodos mas");
 			
+			anioProxVerificacion = anioProxVerificacion + 2;
+			periodoProxVer = meso[this.terminacion][bimestre];
+			Ti.API.info("Es auto nuevo, verifica hasta dentro de 3 periodos mas ini: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
 		}
 		else if(this.modelo < anioActual -1){
 			
 			//Ya no es nuevo verifica al siguiente periodo
-		}
-		
-		//vemos si se requiere la primera notificacion
-		if(rn1){
+			//Revisamos cual es el ultimo periodo que verifico. Si es del segundo bimestre, entonces le aumentamos un año.
+			periodoProxVerS1 = meso[this.terminacion][0];
+			periodoProxVerS2 = meso[this.terminacion][1];
 			
-			//Vemos cuando le toca verificar, dependiendo del año de uv y mes de uv
+			if(this.mesUltimaVerificacion < periodoProxVerS1.ini-1 && this.anioUltimaVerificacion == anioActual){
+				//El mes de verificacion es menor al periodo pero en el mismo año
+				periodoProxVer = periodoProxVerS1;
+				anioProxVerificacion = anioActual;
+			}
+			else if	(this.mesUltimaVerificacion >= periodoProxVerS1.ini-1 && this.mesUltimaVerificacion < periodoProxVerS2.ini-1 && this.anioUltimaVerificacion == anioActual){
+				
+				periodoProxVer = periodoProxVerS2;
+				anioProxVerificacion = anioActual;
+			}
+			else if	(this.mesUltimaVerificacion >= periodoProxVerS1.ini-1 && this.mesUltimaVerificacion > periodoProxVerS2.ini-1 && this.anioUltimaVerificacion == anioActual){
+				
+				periodoProxVer = periodoProxVerS1;
+				anioProxVerificacion = anioActual+1;
+			}
 			
-		}
-	};
-	
-	this.ultimaVerificacion = function(){
-		Ti.API.info('MesID:'+this.mesUltimaVerificacion);
-		return meses[this.mesUltimaVerificacion].toUpperCase() + ' '+this.anioUltimaVerificacion;
-	};
-	
-	this.proximaVerificacion = function(){
-		
-		//TODO: Que se debe hacer cuando nunca se ha verificado?
-		var bimestre = (this.mesUltimaVerificacion < 6)? 0:1;
-		Ti.API.info('Terminacion: '+this.terminacion);
-		//TODO: se debe determinar el año en que se va a verificar.
-		
-		return mesv[this.terminacion][bimestre] + ' de '+this.anioUltimaVerificacion;
-	};
+			else
+			if(bimestre == 1 && this.anioUltimaVerificacion != anioActual){
+				periodoProxVer = periodoProxVerS1;
+				anioProxVerificacion++;
+				
+			}
+			else if(bimestre == 0 && this.anioUltimaVerificacion != anioActual){
+				
+				periodoProxVer = meso[this.terminacion][1];
+			}
+			
+			Ti.API.info("Ya no es nuevo: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
+			
+		}		
+		//Revisa que sea coherente el proximo periodo de verificacion, de lo contrario recualcula con nuevos datos.
+		var ultimoDia = new Date(anioProxVerificacion,periodoProxVer.fin,0);
 
-	this.diasFaltantes = function(){
-		var ret = 'Faltan 250 días';
-		return ret;
+		if(ultimoDia < new Date()){
+			
+			Ti.API.info("Prox Ver Incoherente: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
+			anioUVAux = anioProxVerificacion;
+			mesUVAux = periodoProxVer.fin;
+			return this.calculaProximaVerificacion();
+		}
+		else{
+			mesUVAux = null;
+			anioUVAux = null;
+		}
+			
+		
+		return {anio:anioProxVerificacion, periodo:periodoProxVer};
 	};
 }

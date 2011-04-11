@@ -1,42 +1,48 @@
 var win = Titanium.UI.currentWindow;
 var tabGroup = win.tabGroup;
 win.barColor = 'black';
-//Incluimos el modelo
+
+//Incluimos el modelo de datos
 Ti.include("../modelo/vehiculo.js");
+//Incluimos las filas UI de la tabla de vehiculos
 Ti.include("RowsVehiculo.js");
+//Incluimos la forma de captura y edicion de vehiculos
 Ti.include("VehiculoForm.js");
+
+tabGroup.addEventListener('focus',function(e){
+	
+	Ti.API.info('Idx: '+e.index);
+	if(e.index==4){
+		tableview.setData([]);
+		tableview.setData(RowsVehiculo());
+	}
+	
+});
+
+//Obtenemos la lista de filas
 var data = RowsVehiculo();
 
-// create table view
+// Creamos la vista tabular
 var tableview = Titanium.UI.createTableView({
 	deleteButtonTitle:'Eliminar',
 	editable:true, 
-	moveable:true
+	moveable:false
 });
-
 tableview.setData(data);
 
-// add move event listener
-tableview.addEventListener('move',function(e)
-{
-	Titanium.API.info("move - row="+e.row+", index="+e.index+", section="+e.section+", from = "+e.fromIndex);
-});
-
+//Se asigna listener para edicion
 tableview.addEventListener('click', function(e)
 {
 	if (e.rowData.vehiculo)
 	{
-		Titanium.API.info('quieren ver: '+e.rowData.vehiculo);
-		
 		VehiculoForm(e.rowData.vehiculo);
-		//Titanium.UI.currentTab.open(win,{animated:true});
 	}
 });
 
 //Botones en el nav
 
 //
-//  create edit/cancel buttons for nav bar
+//  crear editar/cancelar en el nav bar
 //
 var edit = Titanium.UI.createButton({
 	title:'Editar'
@@ -45,7 +51,6 @@ var edit = Titanium.UI.createButton({
 edit.addEventListener('click', function()
 {
 	win.setLeftNavButton(cancel);
-	//win.setRightNavButton(cancel);
 	tableview.editing = true;
 });
 
@@ -64,17 +69,18 @@ var add = Titanium.UI.createButton({
 });
 win.setRightNavButton(add);
 
-//add table view to the window
-//if(data.length > 0){ 
-	Titanium.UI.currentWindow.add(tableview);
-	win.setLeftNavButton(edit);
-//}
+//Agregamos la tabla a la ventana raiz
+Titanium.UI.currentWindow.add(tableview);
+win.setLeftNavButton(edit);
 
-	//Event listener para borrar registros
+//Event listener para borrar registros
 tableview.addEventListener('delete',function(e){
 	Ti.API.info("Borrar el "+e.row.myid);
 	var vehiculo = new Vehiculo();
 	vehiculo.borrar(e.row.myid);
+	
+	//Se emite trigger de vehiculo guardado
+	Ti.App.fireEvent('vehiculo.borrado');
 });
 
 /////////////// Pantalla de captura de automovil

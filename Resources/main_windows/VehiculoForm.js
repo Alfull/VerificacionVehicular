@@ -78,12 +78,12 @@ function VehiculoForm(vehiculo){
 		resetColores();
 		var engomado = 0;
 		if(dig == 1 || dig ==2){
-			vColorVer.image='../imgs/icono3.png';
-			engomado = 3;
+			vColorVer.image='../imgs/icono4.png';
+			engomado = 4;
 		}
 		if(dig == 3 || dig ==4){
-			vColorRoj.image='../imgs/icono5.png';
-			engomado = 5;
+			vColorRoj.image='../imgs/icono3.png';
+			engomado = 3;
 		}
 		if(dig == 5 || dig ==6){
 			vColorAm.image='../imgs/icono1.png';
@@ -94,8 +94,8 @@ function VehiculoForm(vehiculo){
 			engomado = 2;
 		}
 		if(dig == 9 || dig ==0){
-			vColorAz.image='../imgs/icono4.png';
-			engomado = 4;
+			vColorAz.image='../imgs/icono5.png';
+			engomado = 5;
 		}
 		vehiculo.engomado = engomado;
 		
@@ -106,9 +106,10 @@ function VehiculoForm(vehiculo){
 	{
 		vColorAm.image='../imgs/icono1-ns.png';
 		vColorRos.image='../imgs/icono2-ns.png';
-		vColorVer.image='../imgs/icono3-ns.png';
-		vColorAz.image='../imgs/icono4-ns.png';
-		vColorRoj.image='../imgs/icono5-ns.png';
+		vColorRoj.image='../imgs/icono3-ns.png';
+		vColorVer.image='../imgs/icono4-ns.png';
+		vColorAz.image='../imgs/icono5-ns.png';
+		
 	};
 
 	var cambiaColor = function(e)
@@ -194,10 +195,21 @@ function VehiculoForm(vehiculo){
 		{
 			alert("La placa introducida no se reconoce como una placa válida.");
 		}
+		else if(res == -5)
+		{
+			alert("La fecha de última verificación no es válida.");
+		}
 		else{
+			
+			//Generamos las notificaciones para este vehiculo
+			vehiculo.calculaRecordatorios();
+			//guardamos todos los valores
 			vehiculo.guardar();
 			win.close();
-			//TODO: Cambiar por un trigger
+			
+			//Se emite trigger de vehiculo guardado
+			Ti.App.fireEvent('vehiculo.guardado');
+			
 			tableview.setData([]);
 			tableview.setData(RowsVehiculo());
 		}
@@ -283,30 +295,34 @@ function VehiculoForm(vehiculo){
 		//height:'auto',
 		width:'auto'
 	});
-	var vColorVer = Titanium.UI.createImageView({
+	
+	var vColorRoj = Titanium.UI.createImageView({
 		image:'../imgs/icono3-ns.png',
-	//top:0,
+		//top:0,
 		//bottom:4,
 		left:64*2-10,
 		//height:'auto',
 		width:'auto'
 	});
-	var vColorAz = Titanium.UI.createImageView({
+	var vColorVer = Titanium.UI.createImageView({
 		image:'../imgs/icono4-ns.png',
-		//top:0,
+	//top:0,
 		//bottom:4,
+		
 		left:64*3-15,
 		//height:'auto',
 		width:'auto'
 	});
-	var vColorRoj = Titanium.UI.createImageView({
+	var vColorAz = Titanium.UI.createImageView({
 		image:'../imgs/icono5-ns.png',
 		//top:0,
 		//bottom:4,
+		
 		left:64*4-20,
 		//height:'auto',
 		width:'auto'
 	});
+
 	
 	vColorAm.colorId = 1;
 	vColorAm.engomado = 1;
@@ -314,28 +330,21 @@ function VehiculoForm(vehiculo){
 	vColorRos.colorId = 2;
 	vColorRos.engomado = 2;
 	
-	vColorVer.colorId = 3;
-	vColorVer.engomado = 3;
+	vColorRoj.colorId = 3;
+	vColorRoj.engomado = 3;	
 	
-	vColorAz.colorId = 4;
-	vColorAz.engomado = 4;
+	vColorVer.colorId = 4;
+	vColorVer.engomado = 4;
 	
-	vColorRoj.colorId = 5;
-	vColorRoj.engomado = 5;
-	
+	vColorAz.colorId = 5;
+	vColorAz.engomado = 5;
+
 	rColores.add(vColorAm);
 	rColores.add(vColorRos);
-	rColores.add(vColorVer);
-	rColores.add(vColorAz);
 	rColores.add(vColorRoj);
+	rColores.add(vColorVer);
+	rColores.add(vColorAz);	
 	
-
-	vColorAm.addEventListener('click', cambiaColor);
-	vColorRos.addEventListener('click', cambiaColor);
-	vColorVer.addEventListener('click', cambiaColor);
-	vColorAz.addEventListener('click', cambiaColor);
-	vColorRoj.addEventListener('click', cambiaColor);
-
 	//Modelo
 	var rModelo = Ti.UI.createTableViewRow({height:anchoCol,width:250,selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE});
 	rModelo.myid = "modelo";
@@ -439,7 +448,7 @@ function VehiculoForm(vehiculo){
 	
 	botonReminder.addEventListener('click',function(){
 		//Modal para recordatorios
-		ReminderForm();
+		ReminderForm(vehiculo);
 	});	
 	
 	win.add(tableForm);
@@ -484,13 +493,30 @@ function VehiculoForm(vehiculo){
 		mPicker.selectionIndicator = true;
 		
 		var vPick = Ti.UI.createView({ 
-			height: 200, 
-			width: 300, 
+			height: '350', 
+			width: '200', 
 			backgroundColor:'black',
 			opacity:0.92
+			//border:1,
+			//borderColor:'white'
 			
 		});
 		vPick.add(mPicker);
+		
+		var bOK = Titanium.UI.createButton({
+			width:80,
+			color:'black',
+			title:'OK',
+			height:40,
+			bottom:0
+		});
+		bOK.addEventListener('click',function()
+		{
+			w.close();
+					
+		});
+		vPick.add(bOK);
+		
 		w.add(vPick);
 		w.setLeftNavButton(b);
 		
@@ -537,9 +563,9 @@ function VehiculoForm(vehiculo){
 		
 		var hasta = new Date().getFullYear();
 		//var hasta = 2011;
-		var anio = hasta-3;
-		//colAnio.addRow(Ti.UI.createPickerRow({title:"Nunca",custom_item:"--"}));
-		for(anio; anio< hasta; anio++){
+		var anio = hasta-2;
+		
+		for(anio; anio <= hasta; anio++){
 			colAnio.addRow(Ti.UI.createPickerRow({title:anio+"",custom_item:anio+""}));
 		}
 		var i;
@@ -557,12 +583,47 @@ function VehiculoForm(vehiculo){
 			top: 0 
 		});
 		vPick.add(uPicker);
-
+		
+		var bOK = Titanium.UI.createButton({
+			width:80,
+			color:'black',
+			title:'OK',
+			height:40,
+			bottom:40
+		});
+		vPick.add(bOK);
+		bOK.addEventListener('click', function(){
+			//Validamos que no este en el futuro
+			var ahora = new Date(new Date().getFullYear(),new Date().getMonth(), 0);
+			var selec = new Date(uPicker.getSelectedRow(1).custom_item,uPicker.getSelectedRow(0).custom_item,0);
+			Ti.API.info('Ahora: '+ahora+ ' SELEC: '+selec);
+			if(ahora < selec)
+			{
+				alert('Ultima verificación inválida, no puede ser en el futuro.');
+				return false;
+			}
+			else{
+				w.close();
+			}
+		});
+		
 		w.add(vPick);
+	
 		w.setLeftNavButton(b);
 		b.addEventListener('click',function()
 		{
-			w.close();
+			//Validamos que no este en el futuro
+			var ahora = new Date(new Date().getFullYear(),new Date().getMonth(), 0);
+			var selec = new Date(uPicker.getSelectedRow(1).custom_item,uPicker.getSelectedRow(0).custom_item,0);
+			Ti.API.info('Ahora: '+ahora+ ' SELEC: '+selec);
+			if(ahora < selec)
+			{
+				alert('Ultima verificación inválida, no puede ser en el futuro.');
+				return false;
+			}
+			else{
+				w.close();
+			}
 		});
 		uPicker.addEventListener('change',function(e)
 		{
@@ -604,9 +665,10 @@ function VehiculoForm(vehiculo){
 		
 		if(vehiculo.engomado==1) vColorAm.image='../imgs/icono1.png';
 		if(vehiculo.engomado==2) vColorRos.image='../imgs/icono2.png';
-		if(vehiculo.engomado==3) vColorVer.image='../imgs/icono3.png';
-		if(vehiculo.engomado==4) vColorAz.image='../imgs/icono4.png';
-		if(vehiculo.engomado==5) vColorRoj.image='../imgs/icono5.png';
+		if(vehiculo.engomado==3) vColorRoj.image='../imgs/icono3.png';
+		if(vehiculo.engomado==4) vColorVer.image='../imgs/icono4.png';
+		if(vehiculo.engomado==5) vColorAz.image='../imgs/icono5.png';
+		
 		//vBFoto.image = (vehiculo.path_foto)?vehiculo.pathFoto:'../imgs/boton-cam.png';
 		
 		
