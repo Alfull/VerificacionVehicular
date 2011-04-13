@@ -174,46 +174,50 @@ function VehiculoForm(vehiculo){
 	});
 	
 	//Guarda el vehiculo
-	bGuardar.addEventListener('click',function(){
-		vehiculo.placa = fPlaca.value;
-		vehiculo.alias = fAlias.value;
+	bGuardar.addEventListener('click',guardarVehiculo);
+	
+	function guardarVehiculo(){
 		
-		var res = vehiculo.validar();
-		if(res == -1)
-		{
-			alert("El alias de este registro es necesario para poder guardar.");
-		}
-		else if(res == -2)
-		{
-			alert("La placa de este registro es necesaria para poder guardar.");
-		}
-		else if(res == -3)
-		{
-			alert("El modelo de este registro es necesario para poder guardar.");
-		}
-		else if(res == -4)
-		{
-			alert("La placa introducida no se reconoce como una placa válida.");
-		}
-		else if(res == -5)
-		{
-			alert("La fecha de última verificación no es válida.");
-		}
-		else{
+			vehiculo.placa = fPlaca.value;
+			vehiculo.alias = fAlias.value;
 			
-			//Generamos las notificaciones para este vehiculo
-			vehiculo.calculaRecordatorios();
-			//guardamos todos los valores
-			vehiculo.guardar();
-			win.close();
-			
-			//Se emite trigger de vehiculo guardado
-			Ti.App.fireEvent('vehiculo.guardado');
-			
-			tableview.setData([]);
-			tableview.setData(RowsVehiculo());
-		}
-	});
+			var res = vehiculo.validar();
+			if(res == -1)
+			{
+				alert("El alias de este registro es necesario para poder guardar.");
+			}
+			else if(res == -2)
+			{
+				alert("La placa de este registro es necesaria para poder guardar.");
+			}
+			else if(res == -3)
+			{
+				alert("El modelo de este registro es necesario para poder guardar.");
+			}
+			else if(res == -4)
+			{
+				alert("La placa introducida no se reconoce como una placa válida.");
+			}
+			else if(res == -5)
+			{
+				alert("La fecha de última verificación no es válida.");
+			}
+			else{
+				
+				//Generamos las notificaciones para este vehiculo
+				vehiculo.calculaRecordatorios();
+				//guardamos todos los valores
+				vehiculo.guardar();
+				win.close();
+				
+				//Se emite trigger de vehiculo guardado
+				Ti.App.fireEvent('vehiculo.guardado');
+				
+				tableview.setData([]);
+				tableview.setData(RowsVehiculo());
+			}
+	}
+	
 	
 	win.setRightNavButton(bGuardar);
 	

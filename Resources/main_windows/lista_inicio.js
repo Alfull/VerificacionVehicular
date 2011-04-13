@@ -261,7 +261,7 @@ tabGroup.addEventListener('focus',function(e){
 					backgroundColor:'white'
 				});
 				var b = Ti.UI.createButton({
-					title:'Ya he verificado este vehículo',
+					title:'Vehículo Verificado',
 					bottom:120,
 					width:290,
 					height:30

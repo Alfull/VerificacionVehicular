@@ -217,6 +217,11 @@ function Vehiculo(rows){
 		{
 			return -3;
 		}
+		else if(this.anioUltimaVerificacion == 0)
+		{
+			return -5;
+		}
+
 		else if(this.validaPlaca(this.placa))
 		{
 			return -4;
@@ -252,7 +257,7 @@ function Vehiculo(rows){
 	this.calculaRecordatorios = function(){
 		
 		var pv = this.calculaProximaVerificacion();
-		
+		if(pv === false){ this.swn1=false; this.swn2=false; this.swn3=false; this.swn4= false;}return;
 		var anioProxVer = pv.anio;
 		var mesIni = pv.periodo.ini;
 		var mesFin = pv.periodo.fin;
@@ -332,7 +337,7 @@ function Vehiculo(rows){
 	this.proximaVerificacion = function(){
 		
 		var pv = this.calculaProximaVerificacion();
-		
+		if(pv === false) return 'PERIODO VENCIDO';
 		var anioProxVer = pv.anio;
 		var periodoProxVer = meses[pv.periodo.ini -1] + ' - '+meses[pv.periodo.fin -1];
 		
@@ -345,7 +350,7 @@ function Vehiculo(rows){
 	this.diasFaltantes = function(){
 		
 		var pv = this.calculaProximaVerificacion();
-		
+		if(pv === false) return " ";
 		var hoy = new Date();
 		var fin = new Date(pv.anio,pv.periodo.fin,0);
 		var inicio = new Date(pv.anio,pv.periodo.ini-1,1);
@@ -381,7 +386,7 @@ function Vehiculo(rows){
 	    //Ya se paso de su verificación
 	    else if(diasfin < 0){
 	    	
-	    	'Finalizó período hace '+Math.abs(diasfin)+' días';
+	    	'Expiró hace '+Math.abs(diasfin)+' días';
 	    }
 	    
 		return res;
@@ -468,9 +473,10 @@ function Vehiculo(rows){
 		if(ultimoDia < new Date()){
 			
 			Ti.API.info("Prox Ver Incoherente: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
-			anioUVAux = anioProxVerificacion;
-			mesUVAux = periodoProxVer.fin;
-			return this.calculaProximaVerificacion();
+			//anioUVAux = anioProxVerificacion;
+			//mesUVAux = periodoProxVer.fin;
+			//return this.calculaProximaVerificacion();
+			return false;
 		}
 		else{
 			mesUVAux = null;
