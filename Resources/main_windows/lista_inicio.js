@@ -42,7 +42,7 @@ tabGroup.addEventListener('focus',function(e){
 		while(rows.isValidRow())
 		{
 			var vehiculo = new Vehiculo(rows);
-			var fcolor = (vehiculo.engomado==3|| vehiculo.engomado==5)?'white':'black'; 
+			var fcolor = (vehiculo.engomado==3 || vehiculo.engomado==4 || vehiculo.engomado==5)?'white':'black'; 
 			
 			Ti.API.info("Leyendo de la base: "+vehiculo.toString() );
 			if(rows.fieldByName('id') == null) continue;
@@ -278,7 +278,9 @@ tabGroup.addEventListener('focus',function(e){
 					var cvehiculo = e.source.vehiculo;
 					cvehiculo.anioUltimaVerificacion = new Date().getFullYear();
 					cvehiculo.mesUltimaVerificacion = new Date().getMonth();
+					cvehiculo.swn1 = true; cvehiculo.swn2 = true; cvehiculo.swn3 = true; cvehiculo.swn4 = true;
 					cvehiculo.calculaRecordatorios();
+					Ti.API.info("LOS EV: "+cvehiculo.toString());
 					cvehiculo.guardar();
 					var svcp = scrollView.currentPage;
 					scrollView.views=[];

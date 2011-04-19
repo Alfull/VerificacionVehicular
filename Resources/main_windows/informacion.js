@@ -30,7 +30,10 @@ tableview.addEventListener('click', function(e){
 	webview = Ti.UI.createWebView();
 	if(rowdata.title=='Multas'){
 		
-		alert('Esta acción abrirá el portal de la SSP para consulta de multas.');
+		var a = Titanium.UI.createAlertDialog({
+			title:'Alerta',
+			message:'Esta acción abrirá el portal de la SSP para consulta de multas.'
+		}).show();
 	}
 	webview.url = rowdata.url;
 	w.add(webview);

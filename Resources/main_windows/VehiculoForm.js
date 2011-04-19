@@ -49,7 +49,10 @@ function VehiculoForm(vehiculo){
 		var medo = redom.exec(val);
 		if(medo==null && mdf==null)
 		{
-			alert("El valor introducido no corresponde a una placa, modifique e intente de nuevo.");
+			var a = Titanium.UI.createAlertDialog({
+				title:'Alerta',
+				message:'El valor introducido no corresponde a una placa, modifique e intente de nuevo.'
+			}).show();
 			return false;
 		}
 		else if(medo!=null && mdf==null)
@@ -184,23 +187,44 @@ function VehiculoForm(vehiculo){
 			var res = vehiculo.validar();
 			if(res == -1)
 			{
-				alert("El alias de este registro es necesario para poder guardar.");
+				
+				var a = Titanium.UI.createAlertDialog({
+					title:'Alerta',
+					message:"El alias de este registro es necesario para poder guardar."
+				}).show();
+				return false;
+
 			}
 			else if(res == -2)
 			{
-				alert("La placa de este registro es necesaria para poder guardar.");
+			
+				var a = Titanium.UI.createAlertDialog({
+					title:'Alerta',
+					message:"La placa de este registro es necesaria para poder guardar."
+				}).show();
 			}
 			else if(res == -3)
 			{
-				alert("El modelo de este registro es necesario para poder guardar.");
+				var a = Titanium.UI.createAlertDialog({
+					title:'Alerta',
+					message:"El modelo de este registro es necesaria para poder guardar."
+				}).show();
 			}
 			else if(res == -4)
 			{
-				alert("La placa introducida no se reconoce como una placa válida.");
+				var a = Titanium.UI.createAlertDialog({
+					title:'Alerta',
+					message:"La placa introducida no se reconoce como una placa válida."
+				}).show();
+				
 			}
 			else if(res == -5)
 			{
-				alert("La fecha de última verificación no es válida.");
+				
+				var a = Titanium.UI.createAlertDialog({
+					title:'Alerta',
+					message:"La fecha de última verificación no es válida."
+				}).show();
 			}
 			else{
 				
@@ -603,7 +627,12 @@ function VehiculoForm(vehiculo){
 			Ti.API.info('Ahora: '+ahora+ ' SELEC: '+selec);
 			if(ahora < selec)
 			{
-				alert('Ultima verificación inválida, no puede ser en el futuro.');
+				
+				var a = Titanium.UI.createAlertDialog({
+					title:'Alerta',
+					message:'Ultima verificación inválida, no puede ser en el futuro.'
+				}).show();
+				
 				return false;
 			}
 			else{
@@ -622,7 +651,11 @@ function VehiculoForm(vehiculo){
 			Ti.API.info('Ahora: '+ahora+ ' SELEC: '+selec);
 			if(ahora < selec)
 			{
-				alert('Ultima verificación inválida, no puede ser en el futuro.');
+				
+				var a = Titanium.UI.createAlertDialog({
+					title:'Alerta',
+					message:'Ultima verificación inválida, no puede ser en el futuro.'
+				}).show();
 				return false;
 			}
 			else{
