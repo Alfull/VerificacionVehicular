@@ -62,12 +62,12 @@ var tableview = Titanium.UI.createTableView({
 	//style:Titanium.UI.iPhone.TableViewStyle.GROUPED
 });
 
-Ti.API.info('Info: '+rows[0].height);
+//Ti.API.info('Info: '+rows[0].height);
 
 //create table view event listener
 tableview.addEventListener('click', function(e)
 {
-	Ti.API.info('tel:'+e.index+' '+data[e.index].url+' tleng:'+(fsize+2)*data.length);
+	//Ti.API.info('tel:'+e.index+' '+data[e.index].url+' tleng:'+(fsize+2)*data.length);
 	Ti.Platform.openURL('tel:'+data[e.index].url);
 });
 

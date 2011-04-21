@@ -59,12 +59,12 @@ function VehiculoForm(vehiculo){
 		{
 			//alert("placa edomex "+medo[2]);
 			terminacion = medo[2].substring(3);
-			Ti.API.info("placa edomex "+medo[2]+ " terminacion "+terminacion);
+			//Ti.API.info("placa edomex "+medo[2]+ " terminacion "+terminacion);
 		}
 		else if(medo==null && mdf!=null)
 		{
 			terminacion = mdf[1].substring(2);
-			Ti.API.info("placa df "+ mdf[1]+" terminacion "+terminacion);
+			//Ti.API.info("placa df "+ mdf[1]+" terminacion "+terminacion);
 		}
 		else{
 			alert("Imposible!");
@@ -102,7 +102,7 @@ function VehiculoForm(vehiculo){
 		}
 		vehiculo.engomado = engomado;
 		
-		Ti.API.info("Engomado: "+engomado);
+		//Ti.API.info("Engomado: "+engomado);
 	};
 
 	var resetColores = function()
@@ -120,7 +120,7 @@ function VehiculoForm(vehiculo){
 		resetColores();
 		e.source.image = '../imgs/icono'+e.source.colorId+'.png';
 		vehiculo.engomado = e.source.engomado;
-		Ti.API.info("Engomado: "+e.source.engomado);
+		//Ti.API.info("Engomado: "+e.source.engomado);
 	};
 
 	var tomaFoto= function()
@@ -137,7 +137,7 @@ function VehiculoForm(vehiculo){
 				f.write(image);
 				//vBFoto.image = f.nativePath;
 				vehiculo.pathFoto = f.nativePath;
-				Ti.API.info("Path foto: "+f.nativePath);
+				//Ti.API.info("Path foto: "+f.nativePath);
 				
 			},
 			cancel:function()
@@ -207,7 +207,7 @@ function VehiculoForm(vehiculo){
 			{
 				var a = Titanium.UI.createAlertDialog({
 					title:'Alerta',
-					message:"El modelo de este registro es necesaria para poder guardar."
+					message:"El modelo de este registro es necesario para poder guardar."
 				}).show();
 			}
 			else if(res == -4)
@@ -562,7 +562,6 @@ function VehiculoForm(vehiculo){
 		}
 		mPicker.addEventListener('change',function(e)
 		{
-			Ti.API.info("You selected row: "+e.row+", column: "+e.column+", custom_item: "+e.row.custom_item);
 			lModeloSel.text = anios[e.rowIndex];
 			vehiculo.modelo = anios[e.rowIndex];
 		});
@@ -624,13 +623,24 @@ function VehiculoForm(vehiculo){
 			//Validamos que no este en el futuro
 			var ahora = new Date(new Date().getFullYear(),new Date().getMonth(), 0);
 			var selec = new Date(uPicker.getSelectedRow(1).custom_item,uPicker.getSelectedRow(0).custom_item,0);
-			Ti.API.info('Ahora: '+ahora+ ' SELEC: '+selec);
+			var aSel = uPicker.getSelectedRow(1).custom_item;
+			//Ti.API.info('Ahora: '+ahora+ ' SELEC: '+selec);
 			if(ahora < selec)
 			{
 				
 				var a = Titanium.UI.createAlertDialog({
 					title:'Alerta',
 					message:'Ultima verificación inválida, no puede ser en el futuro.'
+				}).show();
+				
+				return false;
+			}
+			else if (vehiculo.esNuevo() === true && aSel < vehiculo.modelo - 1 )
+			{
+				
+				var a = Titanium.UI.createAlertDialog({
+					title:'Alerta',
+					message:'Año de última verificación inválido.'
 				}).show();
 				
 				return false;
@@ -648,7 +658,10 @@ function VehiculoForm(vehiculo){
 			//Validamos que no este en el futuro
 			var ahora = new Date(new Date().getFullYear(),new Date().getMonth(), 0);
 			var selec = new Date(uPicker.getSelectedRow(1).custom_item,uPicker.getSelectedRow(0).custom_item,0);
-			Ti.API.info('Ahora: '+ahora+ ' SELEC: '+selec);
+
+			var aSel = uPicker.getSelectedRow(1).custom_item;
+			
+			//Ti.API.info('Ahora: '+ahora+ ' SELEC: '+selec);
 			if(ahora < selec)
 			{
 				
@@ -656,6 +669,16 @@ function VehiculoForm(vehiculo){
 					title:'Alerta',
 					message:'Ultima verificación inválida, no puede ser en el futuro.'
 				}).show();
+				return false;
+			}
+			else if (vehiculo.esNuevo() === true && aSel < vehiculo.modelo - 1 )
+			{
+				
+				var a = Titanium.UI.createAlertDialog({
+					title:'Alerta',
+					message:'Año de última verificación inválido.'
+				}).show();
+				
 				return false;
 			}
 			else{
@@ -679,7 +702,7 @@ function VehiculoForm(vehiculo){
 		});
 
 		w.open({modal:true});
-		Ti.API.info("SET PICK U: "+vehiculo.anioUltimaVerificacion+" - " + (hasta-3));
+		//Ti.API.info("SET PICK U: "+vehiculo.anioUltimaVerificacion+" - " + (hasta-3));
 		if(!vehiculo.mesUltimaVerificacion)
 		{
 			uPicker.setSelectedRow(0,0,false);
@@ -710,7 +733,7 @@ function VehiculoForm(vehiculo){
 		
 		
 		
-		Ti.API.info('../imgs/icono'+vehiculo.engomado+'.png');
+		//Ti.API.info('../imgs/icono'+vehiculo.engomado+'.png');
 	};
 	
 	if(vehiculo.id > 0)

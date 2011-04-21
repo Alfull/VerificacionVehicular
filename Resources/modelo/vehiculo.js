@@ -163,8 +163,8 @@ function Vehiculo(rows){
 					this.engomado, this.terminacion, this.pathFoto,
 					this.n1, this.n2, this.n3, this.n4, this.swn1, this.swn2, this.swn3, this.swn4, this.semestre
 					);
-			Ti.API.info("Guardando: "+this.toString());
-			Ti.API.info("IdEnBase: "+db.lastInsertRowId);
+			//Ti.API.info("Guardando: "+this.toString());
+			//Ti.API.info("IdEnBase: "+db.lastInsertRowId);
 			var res = db.lastInsertRowId;
 			db.close();
 			return res;
@@ -179,8 +179,8 @@ function Vehiculo(rows){
 					this.id);
 			var res = db.rowsAffected;
 			db.close();
-			Ti.API.info("Actualizando: "+this.toString());
-			Ti.API.info("Registros afectados: "+res);
+			//Ti.API.info("Actualizando: "+this.toString());
+			//Ti.API.info("Registros afectados: "+res);
 			return res;
 		}
 		
@@ -194,7 +194,7 @@ function Vehiculo(rows){
 		var sql = 'DELETE FROM vehiculo WHERE id = ?';
 		db.execute(sql,id);
 		var res = db.rowsAffected;
-		Ti.API.info("Se borraron: "+db.rowsAffected);
+		//Ti.API.info("Se borraron: "+db.rowsAffected);
 		db.close();
 		return res;
 	};
@@ -221,7 +221,10 @@ function Vehiculo(rows){
 		{
 			return -5;
 		}
-
+		else if(!this.validaAnioUltimaVerificacion())
+		{
+			return -5;
+		}
 		else if(this.validaPlaca(this.placa))
 		{
 			return -4;
@@ -326,7 +329,7 @@ function Vehiculo(rows){
 	 * Despliega el label de ultima verificacion
 	 */
 	this.ultimaVerificacion = function(){
-		Ti.API.info('MesID:'+this.mesUltimaVerificacion);
+		//Ti.API.info('MesID:'+this.mesUltimaVerificacion);
 		var muv = ((this.mesUltimaVerificacion -1) >= 0)? this.mesUltimaVerificacion : 0;
 		return meses[muv].toUpperCase() + ' '+this.anioUltimaVerificacion;
 	};
@@ -355,7 +358,7 @@ function Vehiculo(rows){
 		var fin = new Date(pv.anio,pv.periodo.fin,0);
 		var inicio = new Date(pv.anio,pv.periodo.ini-1,1);
 		
-		Ti.API.info('Fin:'+fin);
+		//Ti.API.info('Fin:'+fin);
 		
 		var _sec = 1000;
 		var _min = _sec * 60;
@@ -369,8 +372,8 @@ function Vehiculo(rows){
 	    var difi = inicio - hoy;
 	    var diasini = Math.floor(difi / _dia);		
 	    
-	    Ti.API.info('Faltan:'+diasini);
-	    Ti.API.info('Quedan:'+diasfin);
+	    //Ti.API.info('Faltan:'+diasini);
+	    //Ti.API.info('Quedan:'+diasfin);
 	    
 	    var res;
 	    //Todavia falta para que verifique.
@@ -419,7 +422,7 @@ function Vehiculo(rows){
 		
 		var periodoProxVer = {};
 		var anioActual = new Date().getFullYear();
-		Ti.API.info('Terminacion: '+this.terminacion);
+		//Ti.API.info('Terminacion: '+this.terminacion);
 		
 		
 		if(this.modelo == anioActual || this.modelo == anioActual +1 || this.modelo == anioActual -1){
@@ -428,7 +431,7 @@ function Vehiculo(rows){
 			
 			anioProxVerificacion = anioProxVerificacion + 2;
 			periodoProxVer = meso[this.terminacion][bimestre];
-			Ti.API.info("Es auto nuevo, verifica hasta dentro de 3 periodos mas ini: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
+			//Ti.API.info("Es auto nuevo, verifica hasta dentro de 3 periodos mas ini: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
 		}
 		else if(this.modelo < anioActual -1){
 			
@@ -464,7 +467,7 @@ function Vehiculo(rows){
 				periodoProxVer = meso[this.terminacion][1];
 			}
 			
-			Ti.API.info("Ya no es nuevo: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
+			//Ti.API.info("Ya no es nuevo: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
 			
 		}		
 		//Revisa que sea coherente el proximo periodo de verificacion, de lo contrario recualcula con nuevos datos.
@@ -472,7 +475,7 @@ function Vehiculo(rows){
 
 		if(ultimoDia < new Date()){
 			
-			Ti.API.info("Prox Ver Incoherente: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
+			//Ti.API.info("Prox Ver Incoherente: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
 			//anioUVAux = anioProxVerificacion;
 			//mesUVAux = periodoProxVer.fin;
 			//return this.calculaProximaVerificacion();
@@ -485,5 +488,29 @@ function Vehiculo(rows){
 			
 		
 		return {anio:anioProxVerificacion, periodo:periodoProxVer};
+	};
+	
+	/**
+	 * Regresa verdadero en caso de ser vehiculo nuevo. falso de lo contrario
+	 */
+	this.esNuevo = function(){
+		
+		var anioActual = new Date().getFullYear(); 
+		if(this.modelo =='') return -1;
+		if(this.modelo == anioActual || this.modelo == anioActual +1 || this.modelo == anioActual -1)
+			return true;
+		else
+			false;
+	};
+	
+	/**
+	 * Regresa verdadero si el año es valido, falso de lo contrario
+	 */
+	this.validaAnioUltimaVerificacion = function(){
+		//Ti.API.info(' ============== Valida a uv '+this.modelo +' Es nuevo '+this.esNuevo()+' AUV '+this.anioUltimaVerificacion);
+		
+		if(this.esNuevo() === true && this.anioUltimaVerificacion < Number(this.modelo) - 1) return false;
+		else
+			return true;
 	};
 }

@@ -11,7 +11,7 @@ Ti.include("../modelo/vehiculo.js");
 
 tabGroup.addEventListener('focus',function(e){
 	
-	Ti.API.info('Idx: '+e.index);
+	//Ti.API.info('Idx: '+e.index);
 	if(e.index==0){
 		//creaRows();
 		scrollView.views=[];
@@ -44,7 +44,7 @@ tabGroup.addEventListener('focus',function(e){
 			var vehiculo = new Vehiculo(rows);
 			var fcolor = (vehiculo.engomado==3 || vehiculo.engomado==4 || vehiculo.engomado==5)?'white':'black'; 
 			
-			Ti.API.info("Leyendo de la base: "+vehiculo.toString() );
+			//Ti.API.info("Leyendo de la base: "+vehiculo.toString() );
 			if(rows.fieldByName('id') == null) continue;
 			
 			//Vista del engomado
@@ -280,7 +280,7 @@ tabGroup.addEventListener('focus',function(e){
 					cvehiculo.mesUltimaVerificacion = new Date().getMonth();
 					cvehiculo.swn1 = true; cvehiculo.swn2 = true; cvehiculo.swn3 = true; cvehiculo.swn4 = true;
 					cvehiculo.calculaRecordatorios();
-					Ti.API.info("LOS EV: "+cvehiculo.toString());
+					//Ti.API.info("LOS EV: "+cvehiculo.toString());
 					cvehiculo.guardar();
 					var svcp = scrollView.currentPage;
 					scrollView.views=[];
