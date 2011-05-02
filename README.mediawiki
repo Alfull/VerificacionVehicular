@@ -1,7 +1,7 @@
 =Recordatorios para verificación vehicular=
 
-App Móvil para iphone basada en Titanium Appcelerator, que emite recordatorios de verificación para múltiples vehículos dentro del programa de verificación vehicular anticontaminante mexicano.
+App Móvil para Iphone(TM) basada en Titanium Appcelerator, que emite recordatorios de verificación para múltiples vehículos dentro del programa de verificación vehicular anticontaminante mexicano.
 
 =Sobre Titanium=
 
-Se ha realizado esta app, como ejercicio utilizando el framework proporcionado por [[http://www.appcelerator.com/ | Appcelerator]].
+Se ha realizado esta app, utilizando el framework proporcionado por [[http://www.appcelerator.com/ | Appcelerator]].
