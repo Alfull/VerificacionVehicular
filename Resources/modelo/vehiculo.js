@@ -258,51 +258,58 @@ function Vehiculo(rows){
 	 * Genera los recordatorios para cada configuracion seteada.
 	 */
 	this.calculaRecordatorios = function(){
-		
+		Ti.API.info("En recordatorios: ");
 		var pv = this.calculaProximaVerificacion();
-		if(pv === false){ this.swn1=false; this.swn2=false; this.swn3=false; this.swn4= false;}return;
+		//("PV: "+typeof(pv));
+		if(pv===false){ this.swn1=false; this.swn2=false; this.swn3=false; this.swn4= false; return;}
 		var anioProxVer = pv.anio;
-		var mesIni = pv.periodo.ini;
-		var mesFin = pv.periodo.fin;
-		
+		var mesIni = pv.periodo.ini-1;
+		var mesFin = pv.periodo.fin-1;
+		//("Switches: "+this.swn1+this.swn2+this.swn3+this.swn4);
 		//vemos si se requiere la primera notificacion
 		if(this.swn1){
+			var fn1 = new Date(new Date(anioProxVer,mesIni,1).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
 				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin],
 				alertAction:"OK",
 				sound:"pop.caf",
-				date:new Date(new Date(anioProxVer,mesIni-1,1).getTime() + 32400000) //
+				date: fn1 //
 				//date:new Date(new Date().getTime()+300000)
 			});
 			this.n1 = anioProxVer+'-'+mesIni+'-'+'01';
+			Ti.API.info("FN1: "+fn1);
 		}
 		else{
 			this.n1 = null;
 		}
 		//vemos si se requiere la segunda notificacion
 		if(this.swn2){
+			var fn2 = new Date(new Date(anioProxVer,mesFin,1).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
 				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'. Le queda solamente un mes para verificar.',
 				alertAction:"OK",
 				sound:"pop.caf",
-				date:new Date(new Date(anioProxVer,mesFin-1,1).getTime() + 32400000)
+				date: fn2
 				//date:new Date(new Date().getTime()+600000)
 			});
 			this.n2 = anioProxVer+'-'+mesFin+'-'+'01';
+			Ti.API.info("FN2: "+fn2);
 		}
 		else{
 			this.n2 = null;
 		}
 		//vemos si se requiere la tercer notificacion
 		if(this.swn3){
+			var fn3 = new Date(new Date(anioProxVer,mesFin,15).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
 				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'. Le queda menos de dos semanas para verificar.',
 				alertAction:"OK",
 				sound:"pop.caf",
 				//date:new Date(new Date().getTime() + 900000)//
-				date:new Date(new Date(anioProxVer,mesFin-1,15).getTime() + 32400000)
+				date: fn3
 			});
 			this.n3 = anioProxVer+'-'+mesFin+'-'+'15';
+			Ti.API.info("FN3: "+fn3);
 		}
 		else{
 			this.n3 = null;
@@ -310,14 +317,16 @@ function Vehiculo(rows){
 		
 		//vemos si se requiere la cuarta notificacion
 		if(this.swn4){
+			var fn4 = new Date(new Date(anioProxVer,mesFin,23).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
 				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'. Le queda menos de una semana para verificar.',
 				alertAction:"OK",
 				sound:"pop.caf",
-				date:new Date(new Date(anioProxVer,mesFin-1,23).getTime() + 32400000)
+				date:fn4
 				//date:new Date(new Date().getTime()+120000)
 			});
 			this.n4 = anioProxVer+'-'+mesFin+'-'+'23';
+			Ti.API.info("FN4: "+fn4);
 		}
 		else{
 			this.n4 = null;
@@ -372,8 +381,8 @@ function Vehiculo(rows){
 	    var difi = inicio - hoy;
 	    var diasini = Math.floor(difi / _dia);		
 	    
-	    //Ti.API.info('Faltan:'+diasini);
-	    //Ti.API.info('Quedan:'+diasfin);
+	    //('Faltan:'+diasini);
+	    //('Quedan:'+diasfin);
 	    
 	    var res;
 	    //Todavia falta para que verifique.
@@ -382,7 +391,7 @@ function Vehiculo(rows){
 	    	res = 'Faltan '+diasini+' días';
 	    }
 	    //Esta dentro del periodo
-	    else if(diasini < 0 && diasfin > 0){
+	    else if(diasini <= 0 && diasfin > 0){
 	    	
 	    	res = 'Restan '+diasfin+' días para verificar';
 	    }
@@ -391,7 +400,7 @@ function Vehiculo(rows){
 	    	
 	    	'Expiró hace '+Math.abs(diasfin)+' días';
 	    }
-	    
+	    //('Res:'+res);
 		return res;
 	};
 	
@@ -467,7 +476,7 @@ function Vehiculo(rows){
 				periodoProxVer = meso[this.terminacion][1];
 			}
 			
-			//Ti.API.info("Ya no es nuevo: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
+			//("Ya no es nuevo: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
 			
 		}		
 		//Revisa que sea coherente el proximo periodo de verificacion, de lo contrario recualcula con nuevos datos.
@@ -475,7 +484,7 @@ function Vehiculo(rows){
 
 		if(ultimoDia < new Date()){
 			
-			//Ti.API.info("Prox Ver Incoherente: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
+			//("Prox Ver Incoherente: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
 			//anioUVAux = anioProxVerificacion;
 			//mesUVAux = periodoProxVer.fin;
 			//return this.calculaProximaVerificacion();
