@@ -4,6 +4,9 @@
  * Para Bixit SA de CV
  * Para Mobizen SA de CV
  */
+
+Titanium.App.Properties.setString("Version","1.7");
+
 Titanium.UI.setBackgroundColor('#000');
 
 //Inicializamos base
