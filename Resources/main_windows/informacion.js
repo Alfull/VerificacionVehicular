@@ -42,7 +42,19 @@ tableview.addEventListener('click', function(e){
 
 });
 
-Titanium.UI.currentWindow.backgroundImage='../imgs/bg2.png',
+Titanium.UI.currentWindow.backgroundImage='../imgs/bg2.png';
 
-// add table view to the window
+//Label de version del sistema
+var lVersion = Ti.UI.createLabel({
+	color:'black',
+	font:{fontSize:8,fontWeight:'normal'},
+	bottom: 5,
+	right:5,
+	width:70,
+	height:10,
+	textAlign:'right',
+	text: "V. "+Titanium.App.Properties.getString("Version")
+});
+Titanium.UI.currentWindow.add(lVersion);
+
 Titanium.UI.currentWindow.add(tableview);
