@@ -265,16 +265,17 @@ function Vehiculo(rows){
 		var anioProxVer = pv.anio;
 		var mesIni = pv.periodo.ini-1;
 		var mesFin = pv.periodo.fin-1;
+		
+		//Offset en milisegundos, pasada la fecha de la alerta para que suene nueve horas despues. o sea a las 9 am.
+		var hoffset = 8; var moffset = 0;
 		//("Switches: "+this.swn1+this.swn2+this.swn3+this.swn4);
 		//vemos si se requiere la primera notificacion
 		if(this.swn1){
-			var fn1 = new Date(new Date(anioProxVer,mesIni,1).getTime());
+			var fn1 = new Date(new Date(anioProxVer,mesIni,1, hoffset).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
-				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin],
+				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ " verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+".\nInicia periodo.",
 				alertAction:"OK",
-				sound:"pop.caf",
-				date: fn1 //
-				//date:new Date(new Date().getTime()+300000)
+				date: fn1
 			});
 			this.n1 = anioProxVer+'-'+mesIni+'-'+'01';
 			Ti.API.info("FN1: "+fn1);
@@ -284,13 +285,11 @@ function Vehiculo(rows){
 		}
 		//vemos si se requiere la segunda notificacion
 		if(this.swn2){
-			var fn2 = new Date(new Date(anioProxVer,mesFin,1).getTime());
+			var fn2 = new Date(new Date(anioProxVer,mesFin,1, hoffset).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
-				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'. Le queda solamente un mes para verificar.',
+				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ " verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'.\nLe queda solamente un mes para verificar.',
 				alertAction:"OK",
-				sound:"pop.caf",
 				date: fn2
-				//date:new Date(new Date().getTime()+600000)
 			});
 			this.n2 = anioProxVer+'-'+mesFin+'-'+'01';
 			Ti.API.info("FN2: "+fn2);
@@ -300,12 +299,10 @@ function Vehiculo(rows){
 		}
 		//vemos si se requiere la tercer notificacion
 		if(this.swn3){
-			var fn3 = new Date(new Date(anioProxVer,mesFin,15).getTime());
+			var fn3 = new Date(new Date(anioProxVer,mesFin,15, hoffset).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
-				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'. Le queda menos de dos semanas para verificar.',
+				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ " verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'.\nRestan dos semanas al periodo.',
 				alertAction:"OK",
-				sound:"pop.caf",
-				//date:new Date(new Date().getTime() + 900000)//
 				date: fn3
 			});
 			this.n3 = anioProxVer+'-'+mesFin+'-'+'15';
@@ -317,13 +314,11 @@ function Vehiculo(rows){
 		
 		//vemos si se requiere la cuarta notificacion
 		if(this.swn4){
-			var fn4 = new Date(new Date(anioProxVer,mesFin,23).getTime());
+			var fn4 = new Date(new Date(anioProxVer,mesFin,23, hoffset).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
-				alertBody:"Recordatorio de verificación vehicular para su vehículo placas: "+this.placa+ " que verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'. Le queda menos de una semana para verificar.',
+				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ " verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'.\nResta solamente una semana al periodo.',
 				alertAction:"OK",
-				sound:"pop.caf",
 				date:fn4
-				//date:new Date(new Date().getTime()+120000)
 			});
 			this.n4 = anioProxVer+'-'+mesFin+'-'+'23';
 			Ti.API.info("FN4: "+fn4);
@@ -363,11 +358,12 @@ function Vehiculo(rows){
 		
 		var pv = this.calculaProximaVerificacion();
 		if(pv === false) return " ";
-		var hoy = new Date();
+		
+		var hoy = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 		var fin = new Date(pv.anio,pv.periodo.fin,0);
 		var inicio = new Date(pv.anio,pv.periodo.ini-1,1);
 		
-		//Ti.API.info('Fin:'+fin);
+		//Ti.API.info('HOY:'+new Date().getFullYear()+" "+ new Date().getMonth()+" "+ new Date().getDate());
 		
 		var _sec = 1000;
 		var _min = _sec * 60;
@@ -381,8 +377,8 @@ function Vehiculo(rows){
 	    var difi = inicio - hoy;
 	    var diasini = Math.floor(difi / _dia);		
 	    
-	    //('Faltan:'+diasini);
-	    //('Quedan:'+diasfin);
+	    //Ti.API.info('Faltan:'+diasini);
+	    //Ti.API.info('Quedan:'+diasfin);
 	    
 	    var res;
 	    //Todavia falta para que verifique.
@@ -395,6 +391,11 @@ function Vehiculo(rows){
 	    	
 	    	res = 'Restan '+diasfin+' días para verificar';
 	    }
+	    else if(diasfin == 0){
+	    	
+	    	res = 'Hoy último día para verificar';
+	    }
+
 	    //Ya se paso de su verificación
 	    else if(diasfin < 0){
 	    	
@@ -481,14 +482,19 @@ function Vehiculo(rows){
 		}		
 		//Revisa que sea coherente el proximo periodo de verificacion, de lo contrario recualcula con nuevos datos.
 		var ultimoDia = new Date(anioProxVerificacion,periodoProxVer.fin,0);
-
-		if(ultimoDia < new Date()){
+		//Ti.API.info("Ultimo dia:"+ultimoDia+" ==> hoy ==> "+new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+		
+		if(ultimoDia < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())){
 			
 			//("Prox Ver Incoherente: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
 			//anioUVAux = anioProxVerificacion;
 			//mesUVAux = periodoProxVer.fin;
 			//return this.calculaProximaVerificacion();
+			
 			return false;
+		}
+		else if(ultimoDia.getTime() == new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime()){
+			//Ti.API.info("Hoy es el ultimo dia!");
 		}
 		else{
 			mesUVAux = null;
