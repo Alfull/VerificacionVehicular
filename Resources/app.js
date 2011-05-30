@@ -5,7 +5,7 @@
  * Para Mobizen SA de CV
  */
 
-Titanium.App.Properties.setString("Version","1.7");
+Titanium.App.Properties.setString("Version","1.8");
 
 Titanium.UI.setBackgroundColor('#000');
 
