@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
-<id>mx.bixit.movil.vv</id>
-<name>VerificacionVehicular</name>
+<id>mx.bixit.movil</id>
+<name>Verifica</name>
 <version>1.8</version>
 <publisher>Bixit SA de CV</publisher>
 <url>www.bixit.mx</url>
