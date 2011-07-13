@@ -261,7 +261,7 @@ tabGroup.addEventListener('focus',function(e){
 					backgroundColor:'white'
 				});
 				var b = Ti.UI.createButton({
-					title:'Vehículo Verificado',
+					title:'Vehículo Verificado.',
 					bottom:120,
 					width:290,
 					height:30
@@ -280,7 +280,6 @@ tabGroup.addEventListener('focus',function(e){
 					cvehiculo.mesUltimaVerificacion = new Date().getMonth();
 					cvehiculo.swn1 = true; cvehiculo.swn2 = true; cvehiculo.swn3 = true; cvehiculo.swn4 = true;
 					cvehiculo.calculaRecordatorios();
-					//Ti.API.info("LOS EV: "+cvehiculo.toString());
 					cvehiculo.guardar();
 					var svcp = scrollView.currentPage;
 					scrollView.views=[];
@@ -288,6 +287,7 @@ tabGroup.addEventListener('focus',function(e){
 					scrollView.scrollToView(svcp);
 					//Se emite trigger de vehiculo guardado
 					Ti.App.fireEvent('vehiculo.guardado');
+					
 					w.close();
 				});
 
