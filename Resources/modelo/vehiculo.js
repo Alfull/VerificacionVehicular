@@ -25,8 +25,8 @@ function Vehiculo(rows){
 
 	mesv[5][0]="Enero - Febrero";
 	mesv[5][1]="Julio - Agosto";
-	mesv[6][0]="Marzo - Abril";
-	mesv[6][1]="Septiembre - Octubre";
+	mesv[6][0]="Enero - Febrero";
+	mesv[6][1]="Julio - Agosto";
 
 	mesv[7][0]="Febrero - Marzo";
 	mesv[7][1]="Agosto - Septiembre";
@@ -273,7 +273,7 @@ function Vehiculo(rows){
 		if(this.swn1){
 			var fn1 = new Date(new Date(anioProxVer,mesIni,1, hoffset).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
-				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ " verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+".\nInicia periodo.",
+				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ ", verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+".\nINICIA periodo de verificación vehicular.",
 				alertAction:"OK",
 				date: fn1
 			});
@@ -287,7 +287,7 @@ function Vehiculo(rows){
 		if(this.swn2){
 			var fn2 = new Date(new Date(anioProxVer,mesFin,1, hoffset).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
-				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ " verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'.\nLe queda solamente un mes para verificar.',
+				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ ", verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'.\nResta UN MES al periodo de verificación vehicular',
 				alertAction:"OK",
 				date: fn2
 			});
@@ -301,7 +301,7 @@ function Vehiculo(rows){
 		if(this.swn3){
 			var fn3 = new Date(new Date(anioProxVer,mesFin,15, hoffset).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
-				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ " verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'.\nRestan dos semanas al periodo.',
+				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ ", verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'.\nRestan DOS SEMANAS al periodo  de verificación vehicular.',
 				alertAction:"OK",
 				date: fn3
 			});
@@ -316,7 +316,7 @@ function Vehiculo(rows){
 		if(this.swn4){
 			var fn4 = new Date(new Date(anioProxVer,mesFin,23, hoffset).getTime());
 			var notification = Ti.App.iOS.scheduleLocalNotification({
-				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ " verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'.\nResta solamente una semana al periodo.',
+				alertBody:"Su vehículo "+this.alias+" con placas: "+this.placa+ ", verifica en los meses de "+meses[mesIni]+' y '+meses[mesFin]+'.\nResta UNA SEMANA al periodo  de verificación vehicular.',
 				alertAction:"OK",
 				date:fn4
 			});
@@ -441,7 +441,7 @@ function Vehiculo(rows){
 			
 			anioProxVerificacion = anioProxVerificacion + 2;
 			periodoProxVer = meso[this.terminacion][bimestre];
-			//Ti.API.info("Es auto nuevo, verifica hasta dentro de 3 periodos mas ini: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
+			Ti.API.info("Es auto nuevo, verifica hasta dentro de 3 periodos mas ini: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
 		}
 		else if(this.modelo < anioActual -1){
 			
@@ -449,40 +449,60 @@ function Vehiculo(rows){
 			//Revisamos cual es el ultimo periodo que verifico. Si es del segundo bimestre, entonces le aumentamos un año.
 			periodoProxVerS1 = meso[this.terminacion][0];
 			periodoProxVerS2 = meso[this.terminacion][1];
+			Ti.API.info("No es nuevo, verifica al siguiente periodo."+this.toString());
+			Ti.API.info("PS1:"+periodoProxVerS1.ini +" fin: "+periodoProxVerS1.fin);
+			Ti.API.info("PS2:"+periodoProxVerS2.ini +" fin: "+periodoProxVerS2.fin);
 			
 			if(this.mesUltimaVerificacion < periodoProxVerS1.ini-1 && this.anioUltimaVerificacion == anioActual){
 				//El mes de verificacion es menor al periodo pero en el mismo año
 				periodoProxVer = periodoProxVerS1;
 				anioProxVerificacion = anioActual;
+				Ti.API.info("El mes de verificacion es menor al primer periodo pero en el mismo anio");
+
 			}
-			else if	(this.mesUltimaVerificacion >= periodoProxVerS1.ini-1 && this.mesUltimaVerificacion < periodoProxVerS2.ini-1 && this.anioUltimaVerificacion == anioActual){
-				
+			else if	(
+					this.mesUltimaVerificacion >= periodoProxVerS1.ini-1 
+					&& 
+					this.mesUltimaVerificacion < periodoProxVerS2.ini-1 
+					&& 
+					this.anioUltimaVerificacion == anioActual){
+
+				Ti.API.info("La ultima v cae en el primer periodo en el mismo anio. Verifica en 2o periodo mismo anio");
+
 				periodoProxVer = periodoProxVerS2;
 				anioProxVerificacion = anioActual;
+				Ti.API.info("2");
+
 			}
-			else if	(this.mesUltimaVerificacion >= periodoProxVerS1.ini-1 && this.mesUltimaVerificacion > periodoProxVerS2.ini-1 && this.anioUltimaVerificacion == anioActual){
-				
+			else if	(
+					this.mesUltimaVerificacion >= periodoProxVerS2.ini-1 
+					&& 
+					this.anioUltimaVerificacion == anioActual){
+				Ti.API.info("La ultima v cae en el segundo periodo en el mismo anio. Verifica en 1er periodo anio siguiente");
 				periodoProxVer = periodoProxVerS1;
 				anioProxVerificacion = anioActual+1;
+				Ti.API.info("3");
 			}
 			
-			else
-			if(bimestre == 1 && this.anioUltimaVerificacion != anioActual){
+			else if(bimestre == 1 && this.anioUltimaVerificacion != anioActual){
 				periodoProxVer = periodoProxVerS1;
 				anioProxVerificacion++;
+				Ti.API.info("4. "+periodoProxVer.ini+" "+periodoProxVer.fin);
 				
 			}
 			else if(bimestre == 0 && this.anioUltimaVerificacion != anioActual){
-				
+				Ti.API.info("5");
 				periodoProxVer = meso[this.terminacion][1];
+				Ti.API.info("5.1");
 			}
 			
-			//("Ya no es nuevo: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
+			Ti.API.info("Ya no es nuevo: "+periodoProxVer.ini+' fin '+periodoProxVer.fin+' '+anioProxVerificacion);
 			
 		}		
 		//Revisa que sea coherente el proximo periodo de verificacion, de lo contrario recualcula con nuevos datos.
+		Ti.API.info("ESTE: "+anioProxVerificacion+" "+periodoProxVer.fin);
 		var ultimoDia = new Date(anioProxVerificacion,periodoProxVer.fin,0);
-		//Ti.API.info("Ultimo dia:"+ultimoDia+" ==> hoy ==> "+new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+		Ti.API.info("Ultimo dia:"+ultimoDia+" ==> hoy ==> "+new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
 		
 		if(ultimoDia < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())){
 			
@@ -490,17 +510,19 @@ function Vehiculo(rows){
 			//anioUVAux = anioProxVerificacion;
 			//mesUVAux = periodoProxVer.fin;
 			//return this.calculaProximaVerificacion();
-			
+			Ti.API.info("6");
 			return false;
 		}
 		else if(ultimoDia.getTime() == new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime()){
 			//Ti.API.info("Hoy es el ultimo dia!");
+			Ti.API.info("7");
 		}
 		else{
 			mesUVAux = null;
 			anioUVAux = null;
+			Ti.API.info("8");
 		}
-			
+		Ti.API.info("anio:"+anioProxVerificacion+" periodo "+periodoProxVer);	
 		
 		return {anio:anioProxVerificacion, periodo:periodoProxVer};
 	};
