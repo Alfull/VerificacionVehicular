@@ -5,7 +5,7 @@
  * Para Mobizen SA de CV
  */
 
-Titanium.App.Properties.setString("Version","1.8");
+Titanium.App.Properties.setString("Version","1.9");
 
 Titanium.UI.setBackgroundColor('#000');
 
@@ -173,8 +173,7 @@ function initDB(){
 	db.execute('CREATE TABLE IF NOT EXISTS vehiculo  (id TEXT, alias TEXT, placa TEXT, modelo INTEGER, auv INTEGER, muv INTEGER, engomado INTEGER, terminacion INTEGER, path_foto TEXT, n1 TEXT,n2 TEXT,n3 TEXT,n4 TEXT, swn1 INTEGER,swn2 INTEGER,swn3 INTEGER,swn4 INTEGER, semestre INTEGER)');
 	db.close(); 
 }
-Titanium.API.info("Iniciando app");
-
+Titanium.API.info("Iniciando app Ver. "+Titanium.App.Properties.getString("Version"));
 //Listener devehiculos guardados:
 Ti.App.addEventListener('vehiculo.guardado',function(e)
 {
